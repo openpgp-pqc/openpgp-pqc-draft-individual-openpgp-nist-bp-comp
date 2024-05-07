@@ -363,6 +363,7 @@ For encryption, the following composite KEM schemes are specified:
 {: title="KEM algorithm specifications" #kem-alg-specs}
 ID                    | Algorithm                          | Requirement | Definition
 ---------------------:| ---------------------------------- | ----------- | --------------------
+TBD                   | ML-KEM-512  + ECDH-NIST-P-256      | MAY         | {{ecc-mlkem}}
 TBD                   | ML-KEM-768  + ECDH-NIST-P-256      | MAY         | {{ecc-mlkem}}
 TBD                   | ML-KEM-1024 + ECDH-NIST-P-384      | MAY         | {{ecc-mlkem}}
 TBD                   | ML-KEM-768  + ECDH-brainpoolP256r1 | MAY         | {{ecc-mlkem}}
@@ -373,6 +374,7 @@ For signatures, the following (composite) signature schemes are specified:
 {: title="Signature algorithm specifications" #sig-alg-specs}
 ID                    | Algorithm                          | Requirement | Definition
 ---------------------:| ---------------------------------- | ----------- | --------------------
+TBD                   | ML-DSA-44 + ECDSA-NIST-P-256       | MAY         | {{ecc-mldsa}}
 TBD                   | ML-DSA-65 + ECDSA-NIST-P-256       | MAY         | {{ecc-mldsa}}
 TBD                   | ML-DSA-87 + ECDSA-NIST-P-384       | MAY         | {{ecc-mldsa}}
 TBD                   | ML-DSA-65 + ECDSA-brainpoolP256r1  | MAY         | {{ecc-mldsa}}
