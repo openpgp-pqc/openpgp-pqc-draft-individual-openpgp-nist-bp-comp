@@ -9,19 +9,19 @@ number:
 date:
 consensus: true
 v: 3
-area: AREA
-workgroup: WG Working Group
+area: "Security"
+workgroup: "Open Specification for Pretty Good Privacy"
 keyword:
  - next generation
  - unicorn
  - sparkling distributed ledger
 venue:
-  group: WG
-  type: Working Group
-  mail: WG@example.com
-  arch: https://example.com/WG
-  github: USER/REPO
-  latest: https://example.com/LATEST
+  group: "Open Specification for Pretty Good Privacy"
+  type: "Working Group"
+  mail: "openpgp@ietf.org"
+  arch: "https://mailarchive.ietf.org/arch/browse/openpgp/"
+  github: "openpgp-pqc/draft-individual-openpgp-nist-bp-comp"
+  latest: "https://openpgp-pqc.github.io/draft-individual-openpgp-nist-bp-comp/draft-individual-openpgp-nist-bp-comp.html"
 
 author:
  -
