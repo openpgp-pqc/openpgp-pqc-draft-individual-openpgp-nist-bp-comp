@@ -19,11 +19,11 @@
 # Change the file extension to match the format (.xml for XML, etc...)
 #
 ###
-title: "TODO - Your title"
-abbrev: "TODO - Abbreviation"
+title: "PQ/T Composite Schemes for OpenPGP using NIST and Brainpool Domain Parameters"
+abbrev: "NIST Brainpool PQC"
 category: info
 
-docname: draft-todo-yourname-protocol-latest
+docname: draft-individual-openpgp-nist-bp-comp
 submissiontype: IETF  # also: "independent", "editorial", "IAB", or "IRTF"
 number:
 date:
