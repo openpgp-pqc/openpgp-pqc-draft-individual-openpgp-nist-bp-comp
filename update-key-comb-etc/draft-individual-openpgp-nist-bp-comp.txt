@@ -5,11 +5,11 @@
 Network Working Group                                            Q. Dang
 Internet-Draft                                                      NIST
 Intended status: Informational                                  S. Ehlen
-Expires: 29 November 2024                                            BSI
+Expires: 30 November 2024                                            BSI
                                                                  J. Roth
                                                              F. Strenzke
                                                                   MTG AG
-                                                             28 May 2024
+                                                             29 May 2024
 
 
    PQ/T Composite Schemes for OpenPGP using NIST and Brainpool Domain
@@ -53,7 +53,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 29 November 2024.
+   This Internet-Draft will expire on 30 November 2024.
 
 Copyright Notice
 
@@ -129,13 +129,16 @@ Table of Contents
 
 1.  Introduction
 
-   [draft-ietf-openpgp-pqc-03] introduces post-quantum cryptography in
-   OpenPGP.  The ML-KEM and ML-DSA composite schemes defined in that
-   document are build with ECC algorithms using the Edwards Curves
-   defined in [RFC8032] and [RFC7748].  This document extends the set of
-   algorithms given in [draft-ietf-openpgp-pqc-03] by further
-   combinations of ML-KEM and ML-DSA with the NIST [SP800-186] and
-   Brainpool [RFC5639] domain parameters.  The support of NIST and
+   This document defines PQ/T composite schemes based on ML-KEM and ML-
+   DSA combined with ECDH and ECDSA using the NIST and Brainpool domain
+   parameters for the OpenPGP protocol.  As such it extends
+   [draft-ietf-openpgp-pqc-03], which introduces post-quantum
+   cryptography in OpenPGP.  The ML-KEM and ML-DSA composite schemes
+   defined in that document are build with ECC algorithms using the
+   Edwards Curves defined in [RFC8032] and [RFC7748].  This document
+   extends the set of algorithms given in [draft-ietf-openpgp-pqc-03] by
+   further combinations of ML-KEM and ML-DSA with the NIST [SP800-186]
+   and Brainpool [RFC5639] domain parameters.  The support of NIST and
    Brainpool domain parameters is required in various applications
    related to certain regulartory environments.
 
