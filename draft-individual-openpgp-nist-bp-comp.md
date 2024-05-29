@@ -311,7 +311,8 @@ This document defines PQ/T composite schemes based on ML-KEM and ML-DSA combined
 
 # Introduction
 
-[draft-ietf-openpgp-pqc-03] introduces post-quantum cryptography in OpenPGP.
+This document defines PQ/T composite schemes based on ML-KEM and ML-DSA combined with ECDH and ECDSA using the NIST and Brainpool domain parameters for the OpenPGP protocol.
+As such it extends [draft-ietf-openpgp-pqc-03], which introduces post-quantum cryptography in OpenPGP.
 The ML-KEM and ML-DSA composite schemes defined in that document are build with ECC algorithms using the Edwards Curves defined in {{RFC8032}} and {{RFC7748}}.
 This document extends the set of algorithms given in [draft-ietf-openpgp-pqc-03] by further combinations of ML-KEM and ML-DSA with the NIST {{SP800-186}} and Brainpool {{RFC5639}} domain parameters.
 The support of NIST and Brainpool domain parameters is required in various applications related to certain regulartory environments.
