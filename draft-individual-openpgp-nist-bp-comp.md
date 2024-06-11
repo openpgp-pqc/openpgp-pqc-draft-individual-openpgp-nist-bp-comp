@@ -595,7 +595,7 @@ The value of `domSeparation` is the UTF-8 encoding of the string "OpenPGPComposi
 ### Key combiner {#kem-key-combiner}
 
 For the composite KEM schemes defined in {{kem-alg-specs}} the following procedure, which is idententical to one described in [draft-ietf-openpgp-pqc-03], MUST be used to compute the KEK that wraps a session key.
-The construction is a one-step key derivation function compliant to {{SP800-56C}} Section 4, based on SHA3-256.
+The construction is a one-step key derivation function compliant to {{SP800-56C}}, Section 4, based on SHA3-256.
 It is given by the following algorithm, which computes the key encryption key `KEK` that is used to wrap, i.e., encrypt, the session key.
 
     //   multiKeyCombine(ecdhKeyShare, ecdhCipherText, ecdhPublicKey, mlkemKeyShare,
@@ -780,7 +780,7 @@ TBD                    | ML-DSA-87 | 2592       | 4896       | 4595
 
 ### Signature data digest {#mldsa-sig-data-digest}
 
-Signature data (i.e. the data to be signed) is digested prior to signing operations, see {{I-D.ietf-openpgp-crypto-refresh}} Section 5.2.4.
+Signature data (i.e. the data to be signed) is digested prior to signing operations, see {{I-D.ietf-openpgp-crypto-refresh}}, Section 5.2.4.
 Composite ML-DSA + ECC signatures MUST use the associated hash algorithm as specified in {{tab-mldsa-hash}} for the signature data digest.
 Signatures using other hash algorithms MUST be considered invalid.
 
@@ -804,7 +804,7 @@ For ECC this is done following the relative specification in {{RFC7748}}, {{SP80
 
 To sign a message `M` with ML-DSA + ECDSA the following sequence of operations has to be performed:
 
- 1. Generate `dataDigest` according to {{I-D.ietf-openpgp-crypto-refresh}} Section 5.2.4
+ 1. Generate `dataDigest` according to {{I-D.ietf-openpgp-crypto-refresh}}, Section 5.2.4
 
  2. Create the ECDSA signature over `dataDigest` with `ECDSA.Sign()` from {{ecdsa-signature}}
 
@@ -830,7 +830,7 @@ As specified in {{composite-signatures}} an implementation MUST validate both si
 The composite ML-DSA + ECC schemes MUST be used only with v6 signatures, as defined in [I-D.ietf-openpgp-crypto-refresh].
 
 
-The algorithm-specific v6 signature parameters for ML-DSA + ECDSA signatures consists of:
+The algorithm-specific v6 signature parameters for ML-DSA + ECDSA signatures consist of:
 
  - A fixed-length octet string of the big-endian encoded ECDSA value `R`, whose length depends on the algorithm ID as specified in {{tab-ecdsa-artifacts}}.
 
