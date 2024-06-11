@@ -5,11 +5,11 @@
 Network Working Group                                            Q. Dang
 Internet-Draft                                                      NIST
 Intended status: Informational                                  S. Ehlen
-Expires: 30 November 2024                                            BSI
+Expires: 13 December 2024                                            BSI
                                                                  J. Roth
                                                              F. Strenzke
                                                                   MTG AG
-                                                             29 May 2024
+                                                            11 June 2024
 
 
    PQ/T Composite Schemes for OpenPGP using NIST and Brainpool Domain
@@ -53,7 +53,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 30 November 2024.
+   This Internet-Draft will expire on 13 December 2024.
 
 Copyright Notice
 
@@ -590,24 +590,26 @@ Table of Contents
    encryption key KEK that is used to wrap, i.e., encrypt, the session
    key.
 
- //   multiKeyCombine(ecdhKeyShare, ecdhCipherText, mlkemKeyShare,
- //                   mlkemCipherText, fixedInfo)
- //
- //   Input:
- //   ecdhKeyShare    - the ECDH key share encoded as an octet string
- //   ecdhCipherText  - the ECDH ciphertext encoded as an octet string
- //   mlkemKeyShare   - the ML-KEM key share encoded as an octet string
- //   mlkemCipherText - the ML-KEM ciphertext encoded as an octet string
- //   fixedInfo       - the fixed information octet string
- //
- //   Constants:
- //   counter - the 4 byte value 00 00 00 01
+//   multiKeyCombine(ecdhKeyShare, ecdhCipherText, ecdhPublicKey, mlkemKeyShare,
+//                   mlkemCipherText, mlkemPublicKey, fixedInfo)
+//
+//   Input:
+//   ecdhKeyShare    - the ECDH key share encoded as an octet string
+//   ecdhCipherText  - the ECDH ciphertext encoded as an octet string
+//   mlkemKeyShare   - the ML-KEM key share encoded as an octet string
+//   mlkemCipherText - the ML-KEM ciphertext encoded as an octet string
+//   ecdhPublicKey   - The ECDH public key of the recipient as an octet string
+//   mlkemPublicKey  - The ML-KEM public key of the recipient as an octet string
+//   fixedInfo       - the fixed information octet string
+//
+//   Constants:
+//   counter - the 4 byte value 00 00 00 01
 
- ecdhData = ecdhKeyShare || ecdhCipherText || ecdhPublicKey
- mlkemData = mlkemKeyShare || mlkemCipherText || mlkemPublicKey
+ecdhData = ecdhKeyShare || ecdhCipherText || ecdhPublicKey
+mlkemData = mlkemKeyShare || mlkemCipherText || mlkemPublicKey
 
- KEK = SHA3-256(counter || ecdhData || mlkemData || fixedInfo)
- return KEK
+KEK = SHA3-256(counter || ecdhData || mlkemData || fixedInfo)
+return KEK
 
    Note that the values ecdhKeyShare defined in Section 5.1.1 and
    mlkemKeyShare defined in Section 5.1.2 already use the relative
