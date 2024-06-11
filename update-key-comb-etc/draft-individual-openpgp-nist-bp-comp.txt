@@ -585,7 +585,7 @@ Table of Contents
    procedure, which is idententical to one described in
    [draft-ietf-openpgp-pqc-03], MUST be used to compute the KEK that
    wraps a session key.  The construction is a one-step key derivation
-   function compliant to [SP800-56C] Section 4, based on SHA3-256.  It
+   function compliant to [SP800-56C], Section 4, based on SHA3-256.  It
    is given by the following algorithm, which computes the key
    encryption key KEK that is used to wrap, i.e., encrypt, the session
    key.
@@ -853,7 +853,7 @@ return KEK
 6.2.1.  Signature data digest
 
    Signature data (i.e. the data to be signed) is digested prior to
-   signing operations, see [I-D.ietf-openpgp-crypto-refresh]
+   signing operations, see [I-D.ietf-openpgp-crypto-refresh],
    Section 5.2.4.  Composite ML-DSA + ECC signatures MUST use the
    associated hash algorithm as specified in Table 9 for the signature
    data digest.  Signatures using other hash algorithms MUST be
@@ -891,7 +891,7 @@ return KEK
    operations has to be performed:
 
    1.  Generate dataDigest according to
-       [I-D.ietf-openpgp-crypto-refresh] Section 5.2.4
+       [I-D.ietf-openpgp-crypto-refresh], Section 5.2.4
 
    2.  Create the ECDSA signature over dataDigest with ECDSA.Sign() from
        Section 6.1.1
@@ -924,7 +924,7 @@ return KEK
    signatures, as defined in [I-D.ietf-openpgp-crypto-refresh].
 
    The algorithm-specific v6 signature parameters for ML-DSA + ECDSA
-   signatures consists of:
+   signatures consist of:
 
    *  A fixed-length octet string of the big-endian encoded ECDSA value
       R, whose length depends on the algorithm ID as specified in
