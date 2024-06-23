@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-06-20T00:53:19.407101+00:00",
+  "timestamp": "2024-06-23T00:57:58.322888+00:00",
   "repo": "openpgp-pqc/draft-individual-openpgp-nist-bp-comp",
   "labels": [
     {
@@ -63,7 +63,7 @@
       "labels": [],
       "body": "consistent introd. of ML-KEM-512, updates from core pqc draft, Stephan as author, referencing of draft-ietf-openpgp-pqc-03, added introduction, etc.",
       "createdAt": "2024-05-28T14:01:30Z",
-      "updatedAt": "2024-06-11T13:53:59Z",
+      "updatedAt": "2024-06-21T12:58:48Z",
       "baseRepository": "openpgp-pqc/draft-individual-openpgp-nist-bp-comp",
       "baseRefName": "main",
       "baseRefOid": "78a0bb0671677fc8ecd4e6716a08a575d4a2b9ec",
@@ -127,6 +127,19 @@
           "body": "",
           "createdAt": "2024-05-29T06:51:57Z",
           "updatedAt": "2024-06-11T13:33:36Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOL4Ooz85_HOvo",
+          "commit": {
+            "abbreviatedOid": "1358ccb"
+          },
+          "author": "TJ-91",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2024-06-21T12:58:48Z",
+          "updatedAt": "2024-06-21T12:58:48Z",
           "comments": []
         }
       ]
