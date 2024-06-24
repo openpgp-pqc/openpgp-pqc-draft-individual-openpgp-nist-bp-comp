@@ -12,8 +12,8 @@ Expires: 26 December 2024                                            BSI
                                                             24 June 2024
 
 
-   PQ/T Composite Schemes for OpenPGP using NIST and Brainpool Domain
-                               Parameters
+  PQ/T Composite Schemes for OpenPGP using NIST and Brainpool Elliptic
+                        Curve Domain Parameters
               draft-individual-openpgp-nist-bp-comp-latest
 
 Abstract
