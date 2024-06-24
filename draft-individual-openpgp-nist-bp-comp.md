@@ -1,5 +1,5 @@
 ---
-title: "PQ/T Composite Schemes for OpenPGP using NIST and Brainpool Domain Parameters"
+title: "PQ/T Composite Schemes for OpenPGP using NIST and Brainpool Elliptic Curve Domain Parameters"
 abbrev: "NIST Brainpool PQC"
 category: info
 
