@@ -3,7 +3,7 @@ title: "PQ/T Composite Schemes for OpenPGP using NIST and Brainpool Elliptic Cur
 abbrev: "NIST Brainpool PQC"
 category: info
 
-docname: draft-individual-openpgp-nist-bp-comp-latest
+docname: draft-ehlen-openpgp-nist-bp-comp
 submissiontype: IETF
 v: 3
 area: sec
@@ -14,7 +14,7 @@ venue:
   type: Working Group
   mail: openpgp@ietf.org
   arch: "https://mailarchive.ietf.org/arch/browse/openpgp/"
-  repo: "https://github.com/openpgp-pqc/draft-individual-openpgp-nist-bp-comp"
+  repo: "https://github.com/openpgp-pqc/draft-ehlen-openpgp-nist-bp-comp"
 
 author:
  -
