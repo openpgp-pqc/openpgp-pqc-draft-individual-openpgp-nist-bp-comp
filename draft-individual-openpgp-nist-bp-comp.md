@@ -586,7 +586,7 @@ It is given by the following algorithm, which computes the key encryption key `K
     //   eccCipherText   - the ECC ciphertext encoded as an octet string
     //   mlkemKeyShare   - the ML-KEM key share encoded as an octet string
     //   mlkemCipherText - the ML-KEM ciphertext encoded as an octet string
-    //   fixedInfo       - the fixed information octet string
+    //   fixedInfo       - eccCipherText || mlkemCipherText
     //   oBits           - the size of the output keying material in bits
     //
     //   Constants:
@@ -597,15 +597,12 @@ It is given by the following algorithm, which computes the key encryption key `K
 
     eccData = eccKeyShare || eccCipherText
     mlkemData = mlkemKeyShare || mlkemCipherText
-    encData = counter || eccData || mlkemData || fixedInfo
+    encData = counter || eccKeyShare ||  mlkemKeyShare || fixedInfo
 
     KEK = KMAC256(domSeparation, encData, oBits, customizationString)
     return KEK
 
 Here, the parameters to KMAC256 appear in the order as specified in {{SP800-186}}, Section 4, i.e., the key `K`, main input data `X`, requested output length `L`, and optional customization string `S` in that order.
-
-Note that the values `eccKeyShare` defined in {{ecc-kem}} and `mlkemKeyShare` defined in {{mlkem-ops}} already use the relative ciphertext in the derivation.
-The ciphertext is by design included again in the key combiner to provide a robust security proof.
 
 The value of `domSeparation` is the UTF-8 encoding of the string "OpenPGPCompositeKeyDerivationFunction" and MUST be the following octet sequence:
 
@@ -616,8 +613,6 @@ The value of `domSeparation` is the UTF-8 encoding of the string "OpenPGPComposi
 The value of `counter` MUST be set to the following octet sequence:
 
     counter :=  00 00 00 01
-
-The value of `fixedInfo` MUST be set according to {{kem-fixed-info}}.
 
 The value of `customizationString` is the UTF-8 encoding of the string "KDF" and MUST be set to the following octet sequence:
 
