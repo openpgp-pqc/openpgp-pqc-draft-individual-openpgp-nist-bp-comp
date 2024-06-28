@@ -777,7 +777,7 @@ An implementation supporting a specific ML-DSA + ECC algorithm MUST also support
 {: title="Binding between ML-DSA and signature data digest" #tab-mldsa-hash}
 Algorithm ID reference | Hash function | Hash function ID reference
 ----------------------:| ------------- | --------------------------
-TBD (ML-DSA-44 IDs)    | SHA3-256      | 11
+TBD (ML-DSA-44 IDs)    | SHA3-384      | 12
 TBD (ML-DSA-65 IDs)    | SHA3-384      | 12
 TBD (ML-DSA-87 IDs)    | SHA3-512      | 14
 
