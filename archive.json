@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-06-27T00:54:48.364140+00:00",
+  "timestamp": "2024-06-30T00:59:21.067219+00:00",
   "repo": "openpgp-pqc/draft-ehlen-openpgp-nist-bp-comp",
   "labels": [
     {
@@ -63,7 +63,7 @@
       "labels": [],
       "body": "consistent introd. of ML-KEM-512, updates from core pqc draft, Stephan as author, referencing of draft-ietf-openpgp-pqc-03, added introduction, etc.",
       "createdAt": "2024-05-28T14:01:30Z",
-      "updatedAt": "2024-06-26T13:38:32Z",
+      "updatedAt": "2024-06-27T15:59:16Z",
       "baseRepository": "openpgp-pqc/draft-ehlen-openpgp-nist-bp-comp",
       "baseRefName": "main",
       "baseRefOid": "78a0bb0671677fc8ecd4e6716a08a575d4a2b9ec",
@@ -141,8 +141,73 @@
           "createdAt": "2024-06-21T12:58:48Z",
           "updatedAt": "2024-06-24T09:37:32Z",
           "comments": []
+        },
+        {
+          "id": "PRR_kwDOL4Ooz85_5xCS",
+          "commit": {
+            "abbreviatedOid": "85b44bf"
+          },
+          "author": "QuynhDangNIST",
+          "authorAssociation": "COLLABORATOR",
+          "state": "CHANGES_REQUESTED",
+          "body": "For NIST, I have: ML-KEM-512 + P-256, ML-KEM-768 + P-384, ML-KEM-1024 + P-384, ML-DSA-44 + NIST-256, ML-DSA-65 + P-384 and ML-DSA-87 + P-384. How do I make the needed changes in this draft ? ",
+          "createdAt": "2024-06-27T15:59:16Z",
+          "updatedAt": "2024-06-27T15:59:16Z",
+          "comments": []
         }
       ]
+    },
+    {
+      "number": 2,
+      "id": "PR_kwDOL4Ooz85z42_P",
+      "title": "ML kem dsa nist curves",
+      "url": "https://github.com/openpgp-pqc/draft-ehlen-openpgp-nist-bp-comp/pull/2",
+      "state": "OPEN",
+      "author": "QuynhDangNIST",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Hi all, \r\n\r\nI have corrected the composites of ECC + ML-KEM/DSA and their corresponding hash functions. \r\n\r\nI corrected the Key combiner to make it compliant with 56C. In 56 C, Z must be either the EC shared secret, ML-KEM shared secret or the concatenation of them. Z does not include anything else.  So, I moved the ciphertexts to the FixedInfo (called Otherinfo in the previous version of 56C), see page 13 https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-56Cr2.pdf for the definition of Z. \r\n\r\n(counter || Z || FixedInfo) is the x in H(x) on page 11 and x is the encData. \r\n\r\nIncluding the ciphertexts does not hurt security. That is why I don't object it but it does not mean any endorsement from me. ",
+      "createdAt": "2024-06-28T12:45:07Z",
+      "updatedAt": "2024-06-28T12:45:08Z",
+      "baseRepository": "openpgp-pqc/draft-ehlen-openpgp-nist-bp-comp",
+      "baseRefName": "main",
+      "baseRefOid": "78a0bb0671677fc8ecd4e6716a08a575d4a2b9ec",
+      "headRepository": "openpgp-pqc/draft-ehlen-openpgp-nist-bp-comp",
+      "headRefName": "ML-KEM-DSA-NIST-Curves",
+      "headRefOid": "34fc8d59b655883c777daa3be22ee6efd75c8c67",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 3,
+      "id": "PR_kwDOL4Ooz85z69Tu",
+      "title": "Update the prehash function to SHA3-384 for ML-DSA-44",
+      "url": "https://github.com/openpgp-pqc/draft-ehlen-openpgp-nist-bp-comp/pull/3",
+      "state": "OPEN",
+      "author": "QuynhDangNIST",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Update the prehash function to SHA3-384 for ML-DSA-44 so that level 2 security is achieved.",
+      "createdAt": "2024-06-28T18:39:05Z",
+      "updatedAt": "2024-06-28T18:39:06Z",
+      "baseRepository": "openpgp-pqc/draft-ehlen-openpgp-nist-bp-comp",
+      "baseRefName": "ML-KEM-DSA-NIST-Curves",
+      "baseRefOid": "34fc8d59b655883c777daa3be22ee6efd75c8c67",
+      "headRepository": "openpgp-pqc/draft-ehlen-openpgp-nist-bp-comp",
+      "headRefName": "QuynhDangNIST-patch-1",
+      "headRefOid": "99e3f4894a82825f9627e850810d8cd7984cac19",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
     }
   ]
 }
