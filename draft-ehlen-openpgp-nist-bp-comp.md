@@ -400,7 +400,7 @@ For encryption, the following composite KEM schemes are specified:
 ID                     | Algorithm                          | Requirement | Definition
 ---------------------: | ---------------------------------- | ----------- | --------------------
 TBD                    | ML-KEM-512+ECDH-NIST-P-256         | MAY         | {{ecc-mlkem}}
-TBD                    | ML-KEM-768+ECDH-NIST-P-256         | MAY         | {{ecc-mlkem}}
+TBD                    | ML-KEM-768+ECDH-NIST-P-384         | MAY         | {{ecc-mlkem}}
 TBD                    | ML-KEM-1024+ECDH-NIST-P-384        | MAY         | {{ecc-mlkem}}
 TBD                    | ML-KEM-768+ECDH-brainpoolP256r1    | MAY         | {{ecc-mlkem}}
 TBD                    | ML-KEM-1024+ECDH-brainpoolP384r1   | MAY         | {{ecc-mlkem}}
@@ -411,7 +411,7 @@ For signatures, the following (composite) signature schemes are specified:
 ID                     | Algorithm                          | Requirement | Definition
 ---------------------: | ---------------------------------- | ----------- | --------------------
 TBD                    | ML-DSA-44+ECDSA-NIST-P-256         | MAY         | {{ecc-mldsa}}
-TBD                    | ML-DSA-65+ECDSA-NIST-P-256         | MAY         | {{ecc-mldsa}}
+TBD                    | ML-DSA-65+ECDSA-NIST-P-384         | MAY         | {{ecc-mldsa}}
 TBD                    | ML-DSA-87+ECDSA-NIST-P-384         | MAY         | {{ecc-mldsa}}
 TBD                    | ML-DSA-65+ECDSA-brainpoolP256r1    | MAY         | {{ecc-mldsa}}
 TBD                    | ML-DSA-87+ECDSA-brainpoolP384r1    | MAY         | {{ecc-mldsa}}
@@ -449,17 +449,17 @@ In this section we define the encryption, decryption, and data formats for the E
 
 
 {: title="NIST curves parameters and artifact lengths" #tab-ecdh-nist-artifacts}
-|                          | NIST P-256                                                   | NIST P-384                                               |
-| ------------------------ | --------------------------------------------------------     | -------------------------------------------------------- |
-| Algorithm ID reference   | TBD (ML-KEM-512+ECDH-NIST-P-256, ML-KEM-768+ECDH-NIST-P-256) | TBD (ML-KEM-1024+ECDH-NIST-P-384)                        |
-| Field size               | 32 octets                                                    | 48 octets                                                |
-| ECC-KEM                  | ecdhKem ({{ecdh-kem}})                                       | ecdhKem ({{ecdh-kem}})                                   |
-| ECDH public key          | 65 octets of SEC1-encoded public point                       | 97 octets of SEC1-encoded public point                   |
-| ECDH secret key          | 32 octets big-endian encoded secret scalar                   | 48 octets big-endian encoded secret scalar               |
-| ECDH ephemeral           | 65 octets of SEC1-encoded ephemeral point                    | 97 octets of SEC1-encoded ephemeral point                |
-| ECDH share               | 65 octets of SEC1-encoded shared point                       | 97 octets of SEC1-encoded shared point                   |
-| Key share                | 32 octets                                                    | 64 octets                                                |
-| Hash                     | SHA3-256                                                     | SHA3-512                                                 |
+|                          | NIST P-256                                               | NIST P-384                                                        |
+| ------------------------ | -------------------------------------------------------- | --------------------------------------------------------          |
+| Algorithm ID reference   | TBD (ML-KEM-512+ECDH-NIST-P-256)                         | TBD (ML-KEM-768+ECDH-NIST-P-384, ML-KEM-1024+ECDH-NIST-P-384, )   |
+| Field size               | 32 octets                                                | 48 octets                                                         |
+| ECC-KEM                  | ecdhKem ({{ecdh-kem}})                                   | ecdhKem ({{ecdh-kem}})                                            |
+| ECDH public key          | 65 octets of SEC1-encoded public point                   | 97 octets of SEC1-encoded public point                            |
+| ECDH secret key          | 32 octets big-endian encoded secret scalar               | 48 octets big-endian encoded secret scalar                        |
+| ECDH ephemeral           | 65 octets of SEC1-encoded ephemeral point                | 97 octets of SEC1-encoded ephemeral point                         |
+| ECDH share               | 65 octets of SEC1-encoded shared point                   | 97 octets of SEC1-encoded shared point                            |
+| Key share                | 32 octets                                                | 64 octets                                                         |
+| Hash                     | SHA3-256                                                 | SHA3-512                                                          |
 
 {: title="Brainpool curves parameters and artifact lengths" #tab-ecdh-brainpool-artifacts}
 |                          | brainpoolP256r1                                          | brainpoolP384r1                                          |
@@ -556,7 +556,7 @@ The procedure to perform `ML-KEM.Decaps()` is as follows:
 Algorithm ID reference                    | ML-KEM       | ECC-KEM   | ECC-KEM curve
 ----------------------------------------: | ------------ | --------- | --------------
 TBD (ML-KEM-512+ECDH-NIST-P-256)          | ML-KEM-512   | ecdhKem   | NIST P-256
-TBD (ML-KEM-768+ECDH-NIST-P-256)          | ML-KEM-768   | ecdhKem   | NIST P-256
+TBD (ML-KEM-768+ECDH-NIST-P-384)          | ML-KEM-768   | ecdhKem   | NIST P-384
 TBD (ML-KEM-1024+ECDH-NIST-P-384)         | ML-KEM-1024  | ecdhKem   | NIST P-384
 TBD (ML-KEM-768+ECDH-brainpoolP256r1)     | ML-KEM-768   | ecdhKem   | brainpoolP256r1
 TBD (ML-KEM-1024+ECDH-brainpoolP384r1)    | ML-KEM-1024  | ecdhKem   | brainpoolP384r1
@@ -749,7 +749,7 @@ The following table describes the ECDSA parameters and artifact lengths:
 Algorithm ID reference                   | Curve           | Field size | Public key | Secret key | Signature value R | Signature value S
 ---------------------------------------: | --------------- | ---------- | ---------- | ---------- | ----------------- | -----------------
 TBD (ML-DSA-44+ECDSA-NIST-P-256)         | NIST P-256      | 32         | 65         | 32         | 32                | 32
-TBD (ML-DSA-65+ECDSA-NIST-P-256)         | NIST P-256      | 32         | 65         | 32         | 32                | 32
+TBD (ML-DSA-65+ECDSA-NIST-P-384)         | NIST P-384      | 48         | 97         | 48         | 48                | 48
 TBD (ML-DSA-87+ECDSA-NIST-P-384)         | NIST P-384      | 48         | 97         | 48         | 48                | 48
 TBD (ML-DSA-65+ECDSA-brainpoolP256r1)    | brainpoolP256r1 | 32         | 65         | 32         | 32                | 32
 TBD (ML-DSA-87+ECDSA-brainpoolP384r1)    | brainpoolP384r1 | 48         | 97         | 48         | 48                | 48
@@ -790,7 +790,7 @@ An implementation supporting a specific ML-DSA + ECC algorithm MUST also support
 Algorithm ID reference | Hash function | Hash function ID reference
 ----------------------:| ------------- | --------------------------
 TBD (ML-DSA-44 IDs)    | SHA3-256      | 12
-TBD (ML-DSA-65 IDs)    | SHA3-256      | 12
+TBD (ML-DSA-65 IDs)    | SHA3-512      | 14
 TBD (ML-DSA-87 IDs)    | SHA3-512      | 14
 
 ### Key generation procedure {#ecc-mldsa-generation}
