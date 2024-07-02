@@ -364,7 +364,7 @@ For encryption, the following composite KEM schemes are specified:
 ID                    | Algorithm                          | Requirement | Definition
 ---------------------:| ---------------------------------- | ----------- | --------------------
 TBD                   | ML-KEM-512  + ECDH-NIST-P-256      | MAY         | {{ecc-mlkem}}
-TBD                   | ML-KEM-768  + ECDH-NIST-P-256      | MAY         | {{ecc-mlkem}}
+TBD                   | ML-KEM-768  + ECDH-NIST-P-384      | MAY         | {{ecc-mlkem}}
 TBD                   | ML-KEM-1024 + ECDH-NIST-P-384      | MAY         | {{ecc-mlkem}}
 TBD                   | ML-KEM-768  + ECDH-brainpoolP256r1 | MAY         | {{ecc-mlkem}}
 TBD                   | ML-KEM-1024 + ECDH-brainpoolP384r1 | MAY         | {{ecc-mlkem}}
@@ -375,7 +375,7 @@ For signatures, the following (composite) signature schemes are specified:
 ID                    | Algorithm                          | Requirement | Definition
 ---------------------:| ---------------------------------- | ----------- | --------------------
 TBD                   | ML-DSA-44 + ECDSA-NIST-P-256       | MAY         | {{ecc-mldsa}}
-TBD                   | ML-DSA-65 + ECDSA-NIST-P-256       | MAY         | {{ecc-mldsa}}
+TBD                   | ML-DSA-65 + ECDSA-NIST-P-384       | MAY         | {{ecc-mldsa}}
 TBD                   | ML-DSA-87 + ECDSA-NIST-P-384       | MAY         | {{ecc-mldsa}}
 TBD                   | ML-DSA-65 + ECDSA-brainpoolP256r1  | MAY         | {{ecc-mldsa}}
 TBD                   | ML-DSA-87 + ECDSA-brainpoolP384r1  | MAY         | {{ecc-mldsa}}
@@ -402,7 +402,7 @@ This is achieved via KEM combination, i.e. both key encapsulations/decapsulation
 TODO: keep this section or refer to the main PQC draft?
 
 The OpenPGP protocol inherently supports parallel encryption to different keys of the same recipient.
-Implementations MUST NOT encrypt a message with a purely traditional public-key encryption key of a recipient if it is encrypted with a PQ/T key of the same recipient.
+Implementations MUST NOT encrypt a message with a classical/traditional public-key encryption key of a recipient if it is encrypted with a PQ/T key of the same recipient.
 
 ## Composite Signatures
 
@@ -437,15 +437,15 @@ In this section we define the encryption, decryption, and data formats for the E
 {: title="NIST curves parameters and artifact lengths" #tab-ecdh-nist-artifacts}
 |                        | NIST P-256                                             | NIST P-384                                             |
 |------------------------|--------------------------------------------------------|--------------------------------------------------------|
-| Algorithm ID reference | TBD (ML-KEM-768 + ECDH-NIST-P-256)                     | TBD (ML-KEM-1024 + ECDH-NIST-P-384)                    |
+| Algorithm ID reference | TBD ML-KEM-512 + ECDH-NIST-P-256                       | TBD ML-KEM-768/ML-KEM-1024 + ECDH-NIST-P-384           |
 | Field size             | 32 octets                                              | 48 octets                                              |
 | ECC-KEM                | ecdhKem ({{ecdh-kem}})                                 | ecdhKem ({{ecdh-kem}})                                 |
 | ECDH public key        | 65 octets of SEC1-encoded public point                 | 97 octets of SEC1-encoded public point                 |
 | ECDH secret key        | 32 octets big-endian encoded secret scalar             | 48 octets big-endian encoded secret scalar             |
 | ECDH ephemeral         | 65 octets of SEC1-encoded ephemeral point              | 97 octets of SEC1-encoded ephemeral point              |
 | ECDH share             | 65 octets of SEC1-encoded shared point                 | 97 octets of SEC1-encoded shared point                 |
-| Key share              | 32 octets                                              | 64 octets                                              |
-| Hash                   | SHA3-256                                               | SHA3-512                                               |
+| Key share              | 32 octets                                              | 48 octets                                              |
+| Hash                   | SHA3-512                                               | SHA3-512                                               |
 
 {: title="Brainpool curves parameters and artifact lengths" #tab-ecdh-brainpool-artifacts}
 |                        | brainpoolP256r1                                        | brainpoolP384r1                                        |
@@ -515,6 +515,7 @@ All artifacts are encoded as defined in [FIPS-203].
 {: title="ML-KEM parameters artifact lengths in octets" #tab-mlkem-artifacts}
 Algorithm ID reference | ML-KEM      | Public key | Secret key | Ciphertext | Key share
 ----------------------:| ----------- | ---------- | ---------- | ---------- | ---------
+TBD                    | ML-KEM-512  | 800        | 1632       | 768        | 32 
 TBD                    | ML-KEM-768  | 1184       | 2400       | 1088       | 32
 TBD                    | ML-KEM-1024 | 1568       | 3168       | 1568       | 32
 
@@ -541,7 +542,8 @@ The procedure to perform `ML-KEM.Decaps()` is as follows:
 {: title="ML-KEM + ECC composite schemes" #tab-mlkem-ecc-composite}
 Algorithm ID reference                   | ML-KEM       | ECC-KEM   | ECC-KEM curve
 ----------------------------------------:| ------------ | --------- | --------------
-TBD (ML-KEM-768 + ECDH-NIST-P-256)       | ML-KEM-768   | ecdhKem   | NIST P-256
+TBD (ML-KEM-512 + ECDH-NIST-P-256)       | ML-KEM-512   | ecdhKem   | NIST P-256
+TBD (ML-KEM-768 + ECDH-NIST-P-384)       | ML-KEM-768   | ecdhKem   | NIST P-384
 TBD (ML-KEM-1024 + ECDH-NIST-P-384)      | ML-KEM-1024  | ecdhKem   | NIST P-384
 TBD (ML-KEM-768 + ECDH-brainpoolP256r1)  | ML-KEM-768   | ecdhKem   | brainpoolP256r1
 TBD (ML-KEM-1024 + ECDH-brainpoolP384r1) | ML-KEM-1024  | ecdhKem   | brainpoolP384r1
@@ -565,7 +567,7 @@ For the composite KEM schemes defined in {{kem-alg-specs}} the following procedu
     //   Input:
     //   algID     - the algorithm ID encoded as octet
 
-    fixedInfo = algID
+    fixedInfo = algID || eccCipherText || mlkemCipherText
 
 ### Key combiner {#kem-key-combiner}
 
@@ -584,7 +586,7 @@ It is given by the following algorithm, which computes the key encryption key `K
     //   eccCipherText   - the ECC ciphertext encoded as an octet string
     //   mlkemKeyShare   - the ML-KEM key share encoded as an octet string
     //   mlkemCipherText - the ML-KEM ciphertext encoded as an octet string
-    //   fixedInfo       - the fixed information octet string
+    //   fixedInfo       - algID || eccCipherText || mlkemCipherText
     //   oBits           - the size of the output keying material in bits
     //
     //   Constants:
@@ -593,17 +595,13 @@ It is given by the following algorithm, which computes the key encryption key `K
     //   counter             - the 4 byte value 00 00 00 01
     //   customizationString - the UTF-8 encoding of the string "KDF"
 
-    eccData = eccKeyShare || eccCipherText
-    mlkemData = mlkemKeyShare || mlkemCipherText
-    encData = counter || eccData || mlkemData || fixedInfo
+    
+    encData = counter || eccKeyShare ||  mlkemKeyShare || fixedInfo
 
     KEK = KMAC256(domSeparation, encData, oBits, customizationString)
     return KEK
 
 Here, the parameters to KMAC256 appear in the order as specified in {{SP800-186}}, Section 4, i.e., the key `K`, main input data `X`, requested output length `L`, and optional customization string `S` in that order.
-
-Note that the values `eccKeyShare` defined in {{ecc-kem}} and `mlkemKeyShare` defined in {{mlkem-ops}} already use the relative ciphertext in the derivation.
-The ciphertext is by design included again in the key combiner to provide a robust security proof.
 
 The value of `domSeparation` is the UTF-8 encoding of the string "OpenPGPCompositeKeyDerivationFunction" and MUST be the following octet sequence:
 
@@ -614,8 +612,6 @@ The value of `domSeparation` is the UTF-8 encoding of the string "OpenPGPComposi
 The value of `counter` MUST be set to the following octet sequence:
 
     counter :=  00 00 00 01
-
-The value of `fixedInfo` MUST be set according to {{kem-fixed-info}}.
 
 The value of `customizationString` is the UTF-8 encoding of the string "KDF" and MUST be set to the following octet sequence:
 
@@ -643,9 +639,9 @@ The procedure to perform public-key encryption with a ML-KEM + ECC composite sch
 
  6. Compute `(mlkemCipherText, mlkemKeyShare) := ML-KEM.Encaps(mlkemPublicKey)`
 
- 7. Compute `fixedInfo` as specified in {{kem-fixed-info}}
+ 7. Compute `fixedInfo` as specified above in {{kem-fixed-info}}: TODO: Fix the refered doc here to make sure it is the same as above to comply with 56C one step KDF using KMAC. Z is either eccKeyShare, mlkemKeyShare or both. Z does not contain any other information. 
 
- 8. Compute `KEK := multiKeyCombine(eccKeyShare, eccCipherText, mlkemKeyShare, mlkemCipherText, fixedInfo, oBits=256)` as defined in {{kem-key-combiner}}
+ 8. Compute KEK = KMAC256(domSeparation, encData, oBits, customizationString) as defined above.
 
  9. Compute `C := AESKeyWrap(KEK, sessionKey)` with AES-256 as per {{RFC3394}} that includes a 64 bit integrity check
 
@@ -671,9 +667,9 @@ The procedure to perform public-key decryption with a ML-KEM + ECC composite sch
 
  8. Compute `(mlkemKeyShare) := ML-KEM.Decaps(mlkemCipherText, mlkemSecretKey)`
 
- 9. Compute `fixedInfo` as specified in {{kem-fixed-info}}
+ 9. Compute `fixedInfo` as specified above. 
 
- 10. Compute `KEK := multiKeyCombine(eccKeyShare, eccCipherText, mlkemKeyShare, mlkemCipherText, fixedInfo, oBits=256)` as defined in {{kem-key-combiner}}
+ 10. Compute `KEK = KMAC256(domSeparation, encData, oBits, customizationString)` as defined above. 
 
  11. Compute `sessionKey := AESKeyUnwrap(KEK, C)`  with AES-256 as per {{RFC3394}}, aborting if the 64 bit integrity check fails
 
@@ -740,7 +736,8 @@ The following table describes the ECDSA parameters and artifact lengths:
 {: title="ECDSA parameters and artifact lengths in octets" #tab-ecdsa-artifacts}
 Algorithm ID reference                  | Curve           | Field size | Public key | Secret key | Signature value R | Signature value S
 ---------------------------------------:| --------------- | ---------- | ---------- | ---------- | ----------------- | -----------------
-TBD (ML-DSA-65 + ECDSA-NIST-P-256)      | NIST P-256      | 32         | 65         | 32         | 32                | 32
+TBD (ML-DSA-44 + ECDSA-NIST-P-256)      | NIST P-256      | 32         | 65         | 32         | 32                | 32
+TBD (ML-DSA-65 + ECDSA-NIST-P-384)      | NIST P-384      | 48         | 97         | 48         | 48                | 48
 TBD (ML-DSA-87 + ECDSA-NIST-P-384)      | NIST P-384      | 48         | 97         | 48         | 48                | 48
 TBD (ML-DSA-65 + ECDSA-brainpoolP256r1) | brainpoolP256r1 | 32         | 65         | 32         | 32                | 32
 TBD (ML-DSA-87 + ECDSA-brainpoolP384r1) | brainpoolP384r1 | 48         | 97         | 48         | 48                | 48
@@ -763,6 +760,7 @@ All artifacts are encoded as defined in [FIPS-204].
 {: title="ML-DSA parameters and artifact lengths in octets" #tab-mldsa-artifacts}
 Algorithm ID reference | ML-DSA    | Public key | Secret key | Signature value
 ----------------------:| --------- | -----------| ---------- | ---------------
+TBD                    | ML-DSA-44 | 1312       | 2528       | 2420
 TBD                    | ML-DSA-65 | 1952       | 4032       | 3293
 TBD                    | ML-DSA-87 | 2592       | 4896       | 4595
 
@@ -779,8 +777,13 @@ An implementation supporting a specific ML-DSA + ECC algorithm MUST also support
 {: title="Binding between ML-DSA and signature data digest" #tab-mldsa-hash}
 Algorithm ID reference | Hash function | Hash function ID reference
 ----------------------:| ------------- | --------------------------
-TBD (ML-DSA-65 IDs)    | SHA3-256      | 12
+TBD (ML-DSA-44 IDs)    | SHA3-256      | 12
+TBD (ML-DSA-65 IDs)    | SHA3-512      | 14
 TBD (ML-DSA-87 IDs)    | SHA3-512      | 14
+
+TODO: Both ECDSA and ML-DSA sign dataDigest as specified above. This section specifies the prehash for each ML-DSA option. Should we specify the prehash for the associated ECDSA sig which goes with each ML-DSA option here, such as ML-DSA-44 + ECDSA-NIST-P-256 | SHA3-256 | 12 ? 
+
+TODO: ECDSA NIST-NIST-P-256 does not fully define a digital signature algorithm. A ECDSA digital signature algorithm must also specify a suitalbe hash function since the hashing of the data to be signed step is an internal part of ECDSA's spec. It seems to me that this draft does not specify the hashing function inside ECDSA at this moment. 
 
 ### Key generation procedure {#ecc-mldsa-generation}
 
@@ -864,6 +867,7 @@ ID     | Algorithm           | Public Key Format                                
 ---  : | -----               | ---------:                                                                                                             | --------:                                                                                                              | --------:                                                                                                        | -----:                                                                                                                                                                                                 | -----:
 TBD    | ML-DSA-65 + TBD | 32 octets TBD public key , 1952 octets ML-DSA-65 public key ({{tab-mldsa-artifacts}})     | 32 octets TBD secret key , 4032  octets ML-DSA-65 secret ({{tab-mldsa-artifacts}})        | 64 octets TBD signature , 3293 octets ML-DSA-65 signature ({{tab-mldsa-artifacts}}) | N/A                                                                                                                                                                                                    | {{ecc-mldsa}}
 TBD    | ML-DSA-87 + TBD   | 57 octets TBD public key ,  2592 octets ML-DSA-87 public key ({{tab-mldsa-artifacts}})      | 57 octets TBD secret key , 4896 octets ML-DSA-87 secret ({{tab-mldsa-artifacts}})           | 114 octets TBD signature, 4595 octets ML-DSA-87 signature ({{tab-mldsa-artifacts}})  | N/A                                                                                                                                                                                                    | {{ecc-mldsa}}
+TODO: The IANA Cosiderations section is not ready. 
 
 # Changelog
 
