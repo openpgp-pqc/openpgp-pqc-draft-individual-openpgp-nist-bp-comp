@@ -1504,7 +1504,7 @@ All of these schemes are fully specified via their algorithm ID, i.e., they are 
             </tr>
             <tr>
               <td class="text-right" rowspan="1" colspan="1">TBD</td>
-              <td class="text-left" rowspan="1" colspan="1">ML-KEM-768+ECDH-NIST-P-256</td>
+              <td class="text-left" rowspan="1" colspan="1">ML-KEM-768+ECDH-NIST-P-384</td>
               <td class="text-left" rowspan="1" colspan="1">MAY</td>
               <td class="text-left" rowspan="1" colspan="1">
                 <a href="#ecc-mlkem" class="auto internal xref">Section 5.2</a>
@@ -1563,7 +1563,7 @@ All of these schemes are fully specified via their algorithm ID, i.e., they are 
             </tr>
             <tr>
               <td class="text-right" rowspan="1" colspan="1">TBD</td>
-              <td class="text-left" rowspan="1" colspan="1">ML-DSA-65+ECDSA-NIST-P-256</td>
+              <td class="text-left" rowspan="1" colspan="1">ML-DSA-65+ECDSA-NIST-P-384</td>
               <td class="text-left" rowspan="1" colspan="1">MAY</td>
               <td class="text-left" rowspan="1" colspan="1">
                 <a href="#ecc-mldsa" class="auto internal xref">Section 6.2</a>
@@ -1669,8 +1669,8 @@ This is achieved via KEM combination, i.e. both key encapsulations/decapsulation
             <tbody>
               <tr>
                 <td class="text-left" rowspan="1" colspan="1">Algorithm ID reference</td>
-                <td class="text-left" rowspan="1" colspan="1">TBD (ML-KEM-512+ECDH-NIST-P-256, ML-KEM-768+ECDH-NIST-P-256)</td>
-                <td class="text-left" rowspan="1" colspan="1">TBD (ML-KEM-1024+ECDH-NIST-P-384)</td>
+                <td class="text-left" rowspan="1" colspan="1">TBD (ML-KEM-512+ECDH-NIST-P-256)</td>
+                <td class="text-left" rowspan="1" colspan="1">TBD (ML-KEM-768+ECDH-NIST-P-384, ML-KEM-1024+ECDH-NIST-P-384, )</td>
               </tr>
               <tr>
                 <td class="text-left" rowspan="1" colspan="1">Field size</td>
@@ -1948,10 +1948,10 @@ All artifacts are encoded as defined in <span>[<a href="#FIPS-203" class="cite x
               <td class="text-left" rowspan="1" colspan="1">NIST P-256</td>
             </tr>
             <tr>
-              <td class="text-right" rowspan="1" colspan="1">TBD (ML-KEM-768+ECDH-NIST-P-256)</td>
+              <td class="text-right" rowspan="1" colspan="1">TBD (ML-KEM-768+ECDH-NIST-P-384)</td>
               <td class="text-left" rowspan="1" colspan="1">ML-KEM-768</td>
               <td class="text-left" rowspan="1" colspan="1">ecdhKem</td>
-              <td class="text-left" rowspan="1" colspan="1">NIST P-256</td>
+              <td class="text-left" rowspan="1" colspan="1">NIST P-384</td>
             </tr>
             <tr>
               <td class="text-right" rowspan="1" colspan="1">TBD (ML-KEM-1024+ECDH-NIST-P-384)</td>
@@ -2283,13 +2283,13 @@ The secret key, as well as both values <code>R</code> and <code>S</code> of the 
                 <td class="text-left" rowspan="1" colspan="1">32</td>
               </tr>
               <tr>
-                <td class="text-right" rowspan="1" colspan="1">TBD (ML-DSA-65+ECDSA-NIST-P-256)</td>
-                <td class="text-left" rowspan="1" colspan="1">NIST P-256</td>
-                <td class="text-left" rowspan="1" colspan="1">32</td>
-                <td class="text-left" rowspan="1" colspan="1">65</td>
-                <td class="text-left" rowspan="1" colspan="1">32</td>
-                <td class="text-left" rowspan="1" colspan="1">32</td>
-                <td class="text-left" rowspan="1" colspan="1">32</td>
+                <td class="text-right" rowspan="1" colspan="1">TBD (ML-DSA-65+ECDSA-NIST-P-384)</td>
+                <td class="text-left" rowspan="1" colspan="1">NIST P-384</td>
+                <td class="text-left" rowspan="1" colspan="1">48</td>
+                <td class="text-left" rowspan="1" colspan="1">97</td>
+                <td class="text-left" rowspan="1" colspan="1">48</td>
+                <td class="text-left" rowspan="1" colspan="1">48</td>
+                <td class="text-left" rowspan="1" colspan="1">48</td>
               </tr>
               <tr>
                 <td class="text-right" rowspan="1" colspan="1">TBD (ML-DSA-87+ECDSA-NIST-P-384)</td>
@@ -2423,8 +2423,8 @@ Signatures using other hash algorithms MUST be considered invalid.<a href="#sect
               </tr>
               <tr>
                 <td class="text-right" rowspan="1" colspan="1">TBD (ML-DSA-65 IDs)</td>
-                <td class="text-left" rowspan="1" colspan="1">SHA3-256</td>
-                <td class="text-left" rowspan="1" colspan="1">12</td>
+                <td class="text-left" rowspan="1" colspan="1">SHA3-512</td>
+                <td class="text-left" rowspan="1" colspan="1">14</td>
               </tr>
               <tr>
                 <td class="text-right" rowspan="1" colspan="1">TBD (ML-DSA-87 IDs)</td>

@@ -264,7 +264,7 @@ Table of Contents
    +===+==================================+=============+=============+
    |TBD| ML-KEM-512+ECDH-NIST-P-256       | MAY         | Section 5.2 |
    +---+----------------------------------+-------------+-------------+
-   |TBD| ML-KEM-768+ECDH-NIST-P-256       | MAY         | Section 5.2 |
+   |TBD| ML-KEM-768+ECDH-NIST-P-384       | MAY         | Section 5.2 |
    +---+----------------------------------+-------------+-------------+
    |TBD| ML-KEM-1024+ECDH-NIST-P-384      | MAY         | Section 5.2 |
    +---+----------------------------------+-------------+-------------+
@@ -284,7 +284,7 @@ Table of Contents
    | TBD | ML-DSA-44+ECDSA-NIST-P-256      | MAY         | Section     |
    |     |                                 |             | 6.2         |
    +-----+---------------------------------+-------------+-------------+
-   | TBD | ML-DSA-65+ECDSA-NIST-P-256      | MAY         | Section     |
+   | TBD | ML-DSA-65+ECDSA-NIST-P-384      | MAY         | Section     |
    |     |                                 |             | 6.2         |
    +-----+---------------------------------+-------------+-------------+
    | TBD | ML-DSA-87+ECDSA-NIST-P-384      | MAY         | Section     |
@@ -344,39 +344,36 @@ Table of Contents
    Table 3 and Table 4 describe the ECC-KEM parameters and artifact
    lengths.
 
-   +==============+==================================+=================+
-   |              | NIST P-256                       | NIST P-384      |
-   +==============+==================================+=================+
-   | Algorithm ID | TBD (ML-KEM-512+ECDH-            | TBD (ML-KEM-    |
-   | reference    | NIST-P-256, ML-KEM-              | 1024+ECDH-NIST- |
-   |              | 768+ECDH-NIST-P-256)             | P-384)          |
-   +--------------+----------------------------------+-----------------+
-   | Field size   | 32 octets                        | 48 octets       |
-   +--------------+----------------------------------+-----------------+
-   | ECC-KEM      | ecdhKem                          | ecdhKem         |
-   |              | (Section 5.1.1.1)                | (Section        |
-   |              |                                  | 5.1.1.1)        |
-   +--------------+----------------------------------+-----------------+
-   | ECDH public  | 65 octets of                     | 97 octets of    |
-   | key          | SEC1-encoded public              | SEC1-encoded    |
-   |              | point                            | public point    |
-   +--------------+----------------------------------+-----------------+
-   | ECDH secret  | 32 octets big-endian             | 48 octets big-  |
-   | key          | encoded secret scalar            | endian encoded  |
-   |              |                                  | secret scalar   |
-   +--------------+----------------------------------+-----------------+
-   | ECDH         | 65 octets of                     | 97 octets of    |
-   | ephemeral    | SEC1-encoded                     | SEC1-encoded    |
-   |              | ephemeral point                  | ephemeral point |
-   +--------------+----------------------------------+-----------------+
-   | ECDH share   | 65 octets of                     | 97 octets of    |
-   |              | SEC1-encoded shared              | SEC1-encoded    |
-   |              | point                            | shared point    |
-   +--------------+----------------------------------+-----------------+
-   | Key share    | 32 octets                        | 64 octets       |
-   +--------------+----------------------------------+-----------------+
-   | Hash         | SHA3-256                         | SHA3-512        |
-   +--------------+----------------------------------+-----------------+
+   +=========+============================+============================+
+   |         |NIST P-256                  |NIST P-384                  |
+   +=========+============================+============================+
+   |Algorithm|TBD (ML-KEM-512+ECDH-NIST-  |TBD (ML-KEM-768+ECDH-NIST-  |
+   |ID       |P-256)                      |P-384, ML-KEM-1024+ECDH-    |
+   |reference|                            |NIST-P-384, )               |
+   +---------+----------------------------+----------------------------+
+   |Field    |32 octets                   |48 octets                   |
+   |size     |                            |                            |
+   +---------+----------------------------+----------------------------+
+   |ECC-KEM  |ecdhKem (Section 5.1.1.1)   |ecdhKem (Section 5.1.1.1)   |
+   +---------+----------------------------+----------------------------+
+   |ECDH     |65 octets of SEC1-encoded   |97 octets of SEC1-encoded   |
+   |public   |public point                |public point                |
+   |key      |                            |                            |
+   +---------+----------------------------+----------------------------+
+   |ECDH     |32 octets big-endian encoded|48 octets big-endian encoded|
+   |secret   |secret scalar               |secret scalar               |
+   |key      |                            |                            |
+   +---------+----------------------------+----------------------------+
+   |ECDH     |65 octets of SEC1-encoded   |97 octets of SEC1-encoded   |
+   |ephemeral|ephemeral point             |ephemeral point             |
+   +---------+----------------------------+----------------------------+
+   |ECDH     |65 octets of SEC1-encoded   |97 octets of SEC1-encoded   |
+   |share    |shared point                |shared point                |
+   +---------+----------------------------+----------------------------+
+   |Key share|32 octets                   |64 octets                   |
+   +---------+----------------------------+----------------------------+
+   |Hash     |SHA3-256                    |SHA3-512                    |
+   +---------+----------------------------+----------------------------+
 
             Table 3: NIST curves parameters and artifact lengths
 
@@ -520,8 +517,8 @@ Table of Contents
       |  TBD (ML-KEM-512+ECDH- | ML-KEM | ecdhKem | NIST P-256      |
       |            NIST-P-256) | -512   |         |                 |
       +------------------------+--------+---------+-----------------+
-      |  TBD (ML-KEM-768+ECDH- | ML-KEM | ecdhKem | NIST P-256      |
-      |            NIST-P-256) | -768   |         |                 |
+      |  TBD (ML-KEM-768+ECDH- | ML-KEM | ecdhKem | NIST P-384      |
+      |            NIST-P-384) | -768   |         |                 |
       +------------------------+--------+---------+-----------------+
       | TBD (ML-KEM-1024+ECDH- | ML-KEM | ecdhKem | NIST P-384      |
       |            NIST-P-384) | -1024  |         |                 |
@@ -799,9 +796,9 @@ return KEK
    |  44+ECDSA-NIST-|               |     |      |      |         |         |
    |          P-256)|               |     |      |      |         |         |
    +----------------+---------------+-----+------+------+---------+---------+
-   |    TBD (ML-DSA-|NIST P-256     |32   |65    |32    |32       |32       |
+   |    TBD (ML-DSA-|NIST P-384     |48   |97    |48    |48       |48       |
    |  65+ECDSA-NIST-|               |     |      |      |         |         |
-   |          P-256)|               |     |      |      |         |         |
+   |          P-384)|               |     |      |      |         |         |
    +----------------+---------------+-----+------+------+---------+---------+
    |    TBD (ML-DSA-|NIST P-384     |48   |97    |48    |48       |48       |
    |  87+ECDSA-NIST-|               |     |      |      |         |         |
@@ -869,7 +866,7 @@ return KEK
         +========================+===============+===============+
         |    TBD (ML-DSA-44 IDs) | SHA3-256      | 12            |
         +------------------------+---------------+---------------+
-        |    TBD (ML-DSA-65 IDs) | SHA3-256      | 12            |
+        |    TBD (ML-DSA-65 IDs) | SHA3-512      | 14            |
         +------------------------+---------------+---------------+
         |    TBD (ML-DSA-87 IDs) | SHA3-512      | 14            |
         +------------------------+---------------+---------------+
