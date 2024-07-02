@@ -445,7 +445,7 @@ In this section we define the encryption, decryption, and data formats for the E
 | ECDH ephemeral         | 65 octets of SEC1-encoded ephemeral point              | 97 octets of SEC1-encoded ephemeral point              |
 | ECDH share             | 65 octets of SEC1-encoded shared point                 | 97 octets of SEC1-encoded shared point                 |
 | Key share              | 32 octets                                              | 48 octets                                              |
-| Hash                   | SHA3-256                                               | SHA3-384                                               |
+| Hash                   | SHA3-512                                               | SHA3-512                                               |
 
 {: title="Brainpool curves parameters and artifact lengths" #tab-ecdh-brainpool-artifacts}
 |                        | brainpoolP256r1                                        | brainpoolP384r1                                        |
@@ -777,9 +777,13 @@ An implementation supporting a specific ML-DSA + ECC algorithm MUST also support
 {: title="Binding between ML-DSA and signature data digest" #tab-mldsa-hash}
 Algorithm ID reference | Hash function | Hash function ID reference
 ----------------------:| ------------- | --------------------------
-TBD (ML-DSA-44 IDs)    | SHA3-256      | 11
-TBD (ML-DSA-65 IDs)    | SHA3-384      | 12
+TBD (ML-DSA-44 IDs)    | SHA3-256      | 12
+TBD (ML-DSA-65 IDs)    | SHA3-512      | 14
 TBD (ML-DSA-87 IDs)    | SHA3-512      | 14
+
+TODO: Both ECDSA and ML-DSA sign dataDigest as specified above. This section specifies the prehash for each ML-DSA option. Should we specify the prehash for the associated ECDSA sig which goes with each ML-DSA option here, such as ML-DSA-44 + ECDSA-NIST-P-256 | SHA3-256 | 12 ? 
+
+TODO: ECDSA NIST-NIST-P-256 does not fully define a digital signature algorithm. A ECDSA digital signature algorithm must also specify a suitalbe hash function since the hashing of the data to be signed step is an internal part of ECDSA's spec. It seems to me that this draft does not specify the hashing function inside ECDSA at this moment. 
 
 ### Key generation procedure {#ecc-mldsa-generation}
 
