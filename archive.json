@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-07-02T00:55:19.531668+00:00",
+  "timestamp": "2024-07-04T00:55:12.834334+00:00",
   "repo": "openpgp-pqc/draft-ehlen-openpgp-nist-bp-comp",
   "labels": [
     {
@@ -49,7 +49,64 @@
       "color": "ffffff"
     }
   ],
-  "issues": [],
+  "issues": [
+    {
+      "number": 4,
+      "id": "I_kwDOL4Ooz86OXbfd",
+      "title": "Update the KDFs for the combined KEMs to use SHA3-512 for all 3 parameter sets",
+      "url": "https://github.com/openpgp-pqc/draft-ehlen-openpgp-nist-bp-comp/issues/4",
+      "state": "OPEN",
+      "author": "falko-strenzke",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "As suggested by Quynh. Reason: SHA3-512 is used inside ML-KEM in any case.\r\n\r\n@QuynhDangNIST ",
+      "createdAt": "2024-07-03T12:29:39Z",
+      "updatedAt": "2024-07-03T12:29:39Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 5,
+      "id": "I_kwDOL4Ooz86OXeGP",
+      "title": "Clarify that `ECDSA.Sign(ecdsaSecretKey, dataDigest)` does not involve a further hashing step",
+      "url": "https://github.com/openpgp-pqc/draft-ehlen-openpgp-nist-bp-comp/issues/5",
+      "state": "OPEN",
+      "author": "falko-strenzke",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Our document in the current state does not actually clearly define the ECDSA signature. It mentions\r\n\r\n        (ecdsaSignatureR, ecdsaSignatureS) <- ECDSA.Sign(ecdsaSecretKey, dataDigest)\r\n\r\nwithout saying what ECDSA.Sign() actually means. In my understanding is that this is raw signing and no further hash is calculated on dataDigest. But indeed that needs clarification in the document.\r\n\r\nI would like to hear also Johannes judgement if what I say above about the hashing is correct.\r\n\r\n@TJ-91 ",
+      "createdAt": "2024-07-03T12:34:54Z",
+      "updatedAt": "2024-07-03T12:34:54Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 6,
+      "id": "I_kwDOL4Ooz86OXqpq",
+      "title": "Update the KEM-combiner KDF input order to comply with NIST.SP.800-56Cr2",
+      "url": "https://github.com/openpgp-pqc/draft-ehlen-openpgp-nist-bp-comp/issues/6",
+      "state": "OPEN",
+      "author": "falko-strenzke",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "As pointed out by Quynh: For SHA3-(512/256), the only requirement is that the input to the hash function must be:  counter|| ECC shared secret output || ML-KEM shared secret output || anything else. So, Z is the ECC shared secret output || ML-KEM shared secret output. \r\n\r\nSee also\r\nhttps://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-56Cr2.pdf#page=22",
+      "createdAt": "2024-07-03T12:59:14Z",
+      "updatedAt": "2024-07-03T13:07:32Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "falko-strenzke",
+          "authorAssociation": "COLLABORATOR",
+          "body": "@wussler @TJ-91 This will also affect the main draft. It means anything beyond the shared secrets has to be placed in the fixedInfo according to NIST.SP.800-56Cr2.",
+          "createdAt": "2024-07-03T13:07:31Z",
+          "updatedAt": "2024-07-03T13:07:31Z"
+        }
+      ]
+    }
+  ],
   "pulls": [
     {
       "number": 1,
@@ -63,18 +120,26 @@
       "labels": [],
       "body": "consistent introd. of ML-KEM-512, updates from core pqc draft, Stephan as author, referencing of draft-ietf-openpgp-pqc-03, added introduction, etc.",
       "createdAt": "2024-05-28T14:01:30Z",
-      "updatedAt": "2024-06-27T15:59:16Z",
+      "updatedAt": "2024-07-03T12:11:20Z",
       "baseRepository": "openpgp-pqc/draft-ehlen-openpgp-nist-bp-comp",
       "baseRefName": "main",
       "baseRefOid": "78a0bb0671677fc8ecd4e6716a08a575d4a2b9ec",
       "headRepository": "openpgp-pqc/draft-ehlen-openpgp-nist-bp-comp",
       "headRefName": "update-key-comb-etc",
-      "headRefOid": "85b44bfffd2ac57e23309f0fe1d534c781a49e08",
+      "headRefOid": "0802fd259fb712f5077a5ca4bae526af153308b0",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
       "mergeCommit": null,
-      "comments": [],
+      "comments": [
+        {
+          "author": "falko-strenzke",
+          "authorAssociation": "COLLABORATOR",
+          "body": "> For NIST, I have: ML-KEM-512 + P-256, ML-KEM-768 + P-384, ML-KEM-1024 + P-384, ML-DSA-44 + NIST-256, ML-DSA-65 + P-384 and ML-DSA-87 + P-384. How do I make the needed changes in this draft ?\r\n\r\nI have made the requested changes in the last commit 0802fd259fb712f5077a5ca4bae526af153308b0. @QuynhDangNIST Could you re-approve the review please?",
+          "createdAt": "2024-07-03T07:12:31Z",
+          "updatedAt": "2024-07-03T07:12:31Z"
+        }
+      ],
       "reviews": [
         {
           "id": "PRR_kwDOL4Ooz858PH7o",
@@ -154,6 +219,19 @@
           "createdAt": "2024-06-27T15:59:16Z",
           "updatedAt": "2024-06-27T15:59:16Z",
           "comments": []
+        },
+        {
+          "id": "PRR_kwDOL4Ooz86AhjJm",
+          "commit": {
+            "abbreviatedOid": "0802fd2"
+          },
+          "author": "QuynhDangNIST",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "\"consistent introd. of ML-KEM-512, updates from core pqc draft, Stephan as author, referencing of draft-ietf-openpgp-pqc-03, added introduction, etc.\"  . The changes in introduction text look fine to me. ",
+          "createdAt": "2024-07-03T12:11:20Z",
+          "updatedAt": "2024-07-03T12:11:20Z",
+          "comments": []
         }
       ]
     },
@@ -169,13 +247,13 @@
       "labels": [],
       "body": "Hi all, \r\n\r\nI have corrected the composites of ECC + ML-KEM/DSA and their corresponding hash functions. \r\n\r\nI corrected the Key combiner to make it compliant with 56C. In 56 C, Z must be either the EC shared secret, ML-KEM shared secret or the concatenation of them. Z does not include anything else.  So, I moved the ciphertexts to the FixedInfo (called Otherinfo in the previous version of 56C), see page 13 https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-56Cr2.pdf for the definition of Z. \r\n\r\n(counter || Z || FixedInfo) is the x in H(x) on page 11 and x is the encData. \r\n\r\nIncluding the ciphertexts does not hurt security. That is why I don't object it but it does not mean any endorsement from me. ",
       "createdAt": "2024-06-28T12:45:07Z",
-      "updatedAt": "2024-06-28T12:45:08Z",
+      "updatedAt": "2024-07-02T11:12:20Z",
       "baseRepository": "openpgp-pqc/draft-ehlen-openpgp-nist-bp-comp",
       "baseRefName": "main",
       "baseRefOid": "78a0bb0671677fc8ecd4e6716a08a575d4a2b9ec",
       "headRepository": "openpgp-pqc/draft-ehlen-openpgp-nist-bp-comp",
       "headRefName": "ML-KEM-DSA-NIST-Curves",
-      "headRefOid": "34fc8d59b655883c777daa3be22ee6efd75c8c67",
+      "headRefOid": "530fa85bb1b3bd98000e3ac60bddcc4d714cd3f7",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
