@@ -220,6 +220,16 @@ informative:
     seriesinfo:
       NIST Special Publication 800-186
 
+  SP800-186-5:
+    target: https://doi.org/10.6028/NIST.FIPS.186-5
+    title: 'Digital Signature Standard (DSS)'
+    author:
+      -
+        org: Information Technology Laboratory, National Institute of Standards and Technology
+    date: February, 3 2023
+    seriesinfo:
+      NIST Special Publication 800-186
+
   SEC1:
     target: https://secg.org/sec1-v2.pdf
     title: "Standards for Efficient Cryptography 1 (SEC 1)"
@@ -247,6 +257,13 @@ informative:
       author:
         - org: National Institute of Standards and Technology
       date: August 2023
+
+  TR-03111:
+      target: https://www.bsi.bund.de/DE/Themen/Unternehmen-und-Organisationen/Standards-und-Zertifizierung/Technische-Richtlinien/TR-nach-Thema-sortiert/tr03111/TR-03111_node.html
+      title: Technical Guideline BSI TR-03111 – Elliptic Curve Cryptography, Version 2.1
+      author:
+        - org: Federal Office for Information Security, Germany
+      date: June 2018
 
   draft-driscoll-pqt-hybrid-terminology:
     target: https://datatracker.ietf.org/doc/html/draft-driscoll-pqt-hybrid-terminology
@@ -339,7 +356,7 @@ Furthermore, we want to point out that, depending on possible future changes to 
 
 ### ML-KEM {#mlkem-intro}
 
-ML-KEM [FIPS-203] is based on the hardness of solving the learning-with-errors problem in module lattices (MLWE).
+ML-KEM [FIPS-203] is based on the hardness of solving the Learning with Errors problem in module lattices (MLWE).
 The scheme is believed to provide security against cryptanalytic attacks by classical as well as quantum computers.
 This specification defines ML-KEM only in composite combination with ECC-based encryption schemes in order to provide a pre-quantum security fallback.
 
@@ -360,7 +377,7 @@ For interoperability this extension offers ML-* in composite combinations with t
 ## Applicable Specifications for the use of PQC Algorithms in OpenPGP
 
 This document is to be understood as an extension of [draft-ietf-openpgp-pqc-03], which introduced PQC in OpenPGP, in that it defines further algorithm code points.
-All general specifications in [draft-ietf-openpgp-pqc-03] that pertain to the ML-KEM and ML-KEM composite schemes or generally cryptographic schemes defined therein equally apply to the schemes specified in this document.
+All general specifications in [draft-ietf-openpgp-pqc-03] that pertain to the ML-KEM and ML-DSA composite schemes or generally cryptographic schemes defined therein equally apply to the schemes specified in this document.
 
 # Preliminaries
 
@@ -569,7 +586,7 @@ The ML-KEM + ECC composite public-key encryption schemes are built according to 
 
  - A Key-Encryption-Key (KEK) is computed as the output of a key combiner that receives as input both of the above created symmetric key shares and the protocol binding information.
 
- - The session key for content encryption is then wrapped as described in {{RFC3394}} using AES-256 as algorithm and the KEK as key.
+ - The session key for content encryption is then encrypted with the AES Key Wrap Algorithm {{RFC3394}} with AES-256 as the encryption algorithm and using the KEK as the encryption key.
 
  - The PKESK package's algorithm-specific parts are made up of the ML-KEM ciphertext, the ECC ciphertext, and the wrapped session key.
 
@@ -598,6 +615,11 @@ For the composite KEM schemes defined in {{kem-alg-specs}} the following procedu
 The construction is a one-step key derivation function compliant to {{SP800-56C}}, Section 4, based on SHA3-256.
 It is given by the following algorithm, which computes the key encryption key `KEK` that is used to wrap, i.e., encrypt, the session key.
 
+\[Note to the reader: the key combiner defined in the current version of this draft is not actually compliant to {{SP800-56C}}, since the NIST standard requires that the shared secret is fed to the KDF first whereas the combiner defined here feeds
+the key shares of the two component schemes, which together form the shared secret, in two parts with public information in between.
+The combiner will be reworked to fix this defect in conformance to the combiner defined in draft-ietf-openpgp-pqc.
+The change is planned to be integrated into both drafts prior to IETF 121.\]
+
     //   multiKeyCombine(ecdhKeyShare, ecdhCipherText, ecdhPublicKey, mlkemKeyShare,
     //                   mlkemCipherText, mlkemPublicKey, fixedInfo)
     //
@@ -620,9 +642,6 @@ It is given by the following algorithm, which computes the key encryption key `K
     return KEK
 
 
-Note that the values `ecdhKeyShare` defined in {{ecc-kem}} and `mlkemKeyShare` defined in {{mlkem-ops}} already use the relative ciphertext in the derivation.
-The ciphertext and public keys are by design included again in the key combiner to provide a robust security proof.
-
 The value of `counter` MUST be set to the following octet sequence:
 
     counter :=  00 00 00 01
@@ -633,7 +652,7 @@ The value of `fixedInfo` MUST be set according to {{kem-fixed-info}}.
 
 The implementation MUST independently generate the ML-KEM and the ECC component keys.
 ML-KEM key generation follows the specification [FIPS-203] and the artifacts are encoded as fixed-length octet strings as defined in {{mlkem-ops}}.
-For ECC this is done following the relative specification in {{RFC7748}}, {{SP800-186}}, or {{RFC5639}}, and encoding the outputs as fixed-length octet strings in the format specified in {{tab-ecdh-nist-artifacts}} or {{tab-ecdh-brainpool-artifacts}}.
+For ECC this is done following the relative specification in {{SP800-186}} or {{RFC5639}}, and encoding the outputs as fixed-length octet strings in the format specified in {{tab-ecdh-nist-artifacts}} or {{tab-ecdh-brainpool-artifacts}}.
 
 ### Encryption procedure {#ecc-mlkem-encryption}
 
@@ -673,7 +692,7 @@ The procedure to perform public-key decryption with a ML-KEM + ECC composite sch
 
  5. Instantiate the ECC-KEM and the ML-KEM depending on the algorithm ID according to {{tab-mlkem-ecc-composite}}
 
- 6. Parse `eccCipherText`, `mlkemCipherText`, and `C` from `encryptedKey` encoded as `eccCipherText || mlkemCipherText || len(C) (|| symAlgId) || C` as specified in {{ecc-mlkem-pkesk}}, where `symAlgId` is present only in the case of a v3 PKESK.
+ 6. Parse `eccCipherText`, `mlkemCipherText`, and `C` from `encryptedKey` encoded as `eccCipherText || mlkemCipherText || len(symAlgId, C) (|| symAlgId) || C` as specified in {{ecc-mlkem-pkesk}}, where `symAlgId` is present only in the case of a v3 PKESK.
 
  7. Compute `(eccKeyShare) := ECC-KEM.Decaps(eccCipherText, eccSecretKey, eccPublicKey)`
 
@@ -740,6 +759,9 @@ and
     (verified) <- ECDSA.Verify(ecdsaPublicKey, ecdsaSignatureR,
                                ecdsaSignatureS, dataDigest)
 
+Here, the operation `ECDSA.Sign()` is defined as the algorithm in Section "6.4.1 ECDSA Signature Generation Algorithm" of {{SP800-186-5}}, however, excluding Step 1: `H = Hash(M)` in that algorithm specification, as in this specification the message digest `H` is a direct input to the operation `ECDSA.Sign()`. Equivalently, the operation `ECDSA.Sign()` can be understood as representing the algorithm under Section "4.2.1.1. Signature Algorithm" in {{TR-03111}}, again with the difference that in this specification the message digest `H_Tau(M)` appearing in Step 5 of the algorithm specification is the direct input to the operation `ECDSA.Sign()` and thus the hash computation is not carried out.
+The same statement holds for the definition of the verification operation `ECDSA.Verify()`: it is given either through the algorithm defined in Section "6.4.2 ECDSA Signature Verification Algorithm" of {{SP800-186-5}} omitting the message digest computation in Step 2 or by the algorithm in Section "4.2.1.2. Verification Algorithm" of {{TR-03111}} omitting the message digest computation in Step 3.
+
 The public keys MUST be encoded in SEC1 format as defined in section {{sec1-format}}.
 The secret key, as well as both values `R` and `S` of the signature MUST each be encoded as a big-endian integer in a fixed-length octet string of the specified size.
 
@@ -749,8 +771,7 @@ The following table describes the ECDSA parameters and artifact lengths:
 Algorithm ID reference                   | Curve           | Field size | Public key | Secret key | Signature value R | Signature value S
 ---------------------------------------: | --------------- | ---------- | ---------- | ---------- | ----------------- | -----------------
 TBD (ML-DSA-44+ECDSA-NIST-P-256)         | NIST P-256      | 32         | 65         | 32         | 32                | 32
-TBD (ML-DSA-65+ECDSA-NIST-P-384)         | NIST P-384      | 48         | 97         | 48         | 48                | 48
-TBD (ML-DSA-87+ECDSA-NIST-P-384)         | NIST P-384      | 48         | 97         | 48         | 48                | 48
+TBD (ML-DSA-65+ECDSA-NIST-P-384,ML-DSA-87+ECDSA-NIST-P-384)         | NIST P-384      | 48         | 97         | 48         | 48                | 48
 TBD (ML-DSA-65+ECDSA-brainpoolP256r1)    | brainpoolP256r1 | 32         | 65         | 32         | 32                | 32
 TBD (ML-DSA-87+ECDSA-brainpoolP384r1)    | brainpoolP384r1 | 48         | 97         | 48         | 48                | 48
 
@@ -786,7 +807,7 @@ Signatures using other hash algorithms MUST be considered invalid.
 
 An implementation supporting a specific ML-DSA + ECC algorithm MUST also support the matching hash algorithm.
 
-{: title="Binding between ML-DSA and signature data digest" #tab-mldsa-hash}
+{: title="Binding between ML-DSA + ECDSA and signature data digest" #tab-mldsa-hash}
 Algorithm ID reference | Hash function | Hash function ID reference
 ----------------------:| ------------- | --------------------------
 TBD (ML-DSA-44 IDs)    | SHA3-256      | 12
@@ -797,7 +818,7 @@ TBD (ML-DSA-87 IDs)    | SHA3-512      | 14
 
 The implementation MUST independently generate the ML-DSA and the ECC component keys.
 ML-DSA key generation follows the specification [FIPS-204] and the artifacts are encoded as fixed-length octet strings as defined in {{mldsa-signature}}.
-For ECC this is done following the relative specification in {{RFC7748}}, {{SP800-186}}, or {{RFC5639}}, and encoding the artifacts as specified in {{ecdsa-signature}} as fixed-length octet strings.
+For ECC this is done following the relative specification in {{SP800-186}} or {{RFC5639}}, and encoding the artifacts as specified in {{ecdsa-signature}} as fixed-length octet strings.
 
 ### Signature Generation
 
@@ -869,20 +890,17 @@ TBD
 IANA is requested to add the algorithm IDs defined in {{iana-pubkey-algos}} to the existing registry `OpenPGP Public Key Algorithms`.
 The field specifications enclosed in brackets for the ML-KEM + ECDH composite algorithms denote fields that are only conditionally contained in the data structure.
 
-TODO:update with agreed-on algorithms
+\[Note: Once the working group has agreed on the actual algorithm choice, the following table with the requested IANA updates will be filled out.\]
 
 {: title="IANA updates for registry 'OpenPGP Public Key Algorithms'" #iana-pubkey-algos}
 ID     | Algorithm           | Public Key Format                                                                                                      | Secret Key Format                                                                                                      | Signature Format                                                                                                 | PKESK Format                                                                                                                                                                                           | Reference
 ---  : | -----               | ---------:                                                                                                             | --------:                                                                                                              | --------:                                                                                                        | -----:                                                                                                                                                                                                 | -----:
-TBD    | ML-DSA-65+TBD | 32 octets TBD public key , 1952 octets ML-DSA-65 public key ({{tab-mldsa-artifacts}})     | 32 octets TBD secret key , 4032  octets ML-DSA-65 secret ({{tab-mldsa-artifacts}})        | 64 octets TBD signature , 3293 octets ML-DSA-65 signature ({{tab-mldsa-artifacts}}) | N/A                                                                                                                                                                                                    | {{ecc-mldsa}}
-TBD    | ML-DSA-87+TBD   | 57 octets TBD public key ,  2592 octets ML-DSA-87 public key ({{tab-mldsa-artifacts}})      | 57 octets TBD secret key , 4896 octets ML-DSA-87 secret ({{tab-mldsa-artifacts}})           | 114 octets TBD signature, 4595 octets ML-DSA-87 signature ({{tab-mldsa-artifacts}})  | N/A                                                                                                                                                                                                    | {{ecc-mldsa}}
+TBD    | ML-DSA-65+TBD | TBD octets TBD public key , TBD octets ML-DSA-65 public key ({{tab-mldsa-artifacts}})     | TBD octets TBD secret key , TBD octets ML-DSA-65 secret ({{tab-mldsa-artifacts}})        | TBD octets TBD signature , TBD octets ML-DSA-65 signature ({{tab-mldsa-artifacts}}) | N/A                                                                                                                                                                                                    | {{ecc-mldsa}}
 
 # Changelog
 
 
 # Contributors
-Carl-Daniel Hailfinger (BSI)<br>
-Andreas Huelsing (TU Eindhoven)
 
 --- back
 
