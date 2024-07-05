@@ -5,11 +5,11 @@
 Network Working Group                                            Q. Dang
 Internet-Draft                                                      NIST
 Intended status: Informational                                  S. Ehlen
-Expires: 5 January 2025                                              BSI
+Expires: 6 January 2025                                              BSI
                                                                  J. Roth
                                                              F. Strenzke
                                                                   MTG AG
-                                                             4 July 2024
+                                                             5 July 2024
 
 
   PQ/T Composite Schemes for OpenPGP using NIST and Brainpool Elliptic
@@ -52,7 +52,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 5 January 2025.
+   This Internet-Draft will expire on 6 January 2025.
 
 Copyright Notice
 
@@ -172,8 +172,8 @@ Table of Contents
 
 1.2.1.  ML-KEM
 
-   ML-KEM [FIPS-203] is based on the hardness of solving the learning-
-   with-errors problem in module lattices (MLWE).  The scheme is
+   ML-KEM [FIPS-203] is based on the hardness of solving the Learning
+   with Errors problem in module lattices (MLWE).  The scheme is
    believed to provide security against cryptanalytic attacks by
    classical as well as quantum computers.  This specification defines
    ML-KEM only in composite combination with ECC-based encryption
@@ -207,7 +207,7 @@ Table of Contents
    This document is to be understood as an extension of
    [draft-ietf-openpgp-pqc-03], which introduced PQC in OpenPGP, in that
    it defines further algorithm code points.  All general specifications
-   in [draft-ietf-openpgp-pqc-03] that pertain to the ML-KEM and ML-KEM
+   in [draft-ietf-openpgp-pqc-03] that pertain to the ML-KEM and ML-DSA
    composite schemes or generally cryptographic schemes defined therein
    equally apply to the schemes specified in this document.
 
@@ -545,9 +545,9 @@ Table of Contents
       combiner that receives as input both of the above created
       symmetric key shares and the protocol binding information.
 
-   *  The session key for content encryption is then wrapped as
-      described in [RFC3394] using AES-256 as algorithm and the KEK as
-      key.
+   *  The session key for content encryption is then encrypted with the
+      AES Key Wrap Algorithm [RFC3394] with AES-256 as the encryption
+      algorithm and using the KEK as the encryption key.
 
    *  The PKESK package's algorithm-specific parts are made up of the
       ML-KEM ciphertext, the ECC ciphertext, and the wrapped session
@@ -586,6 +586,16 @@ Table of Contents
    encryption key KEK that is used to wrap, i.e., encrypt, the session
    key.
 
+   [Note to the reader: the key combiner defined in the current version
+   of this draft is not actually compliant to [SP800-56C], since the
+   NIST standard requires that the shared secret is fed to the KDF first
+   whereas the combiner defined here feeds the key shares of the two
+   component schemes, which together form the shared secret, in two
+   parts with public information in between.  The combiner will be
+   reworked to fix this defect in conformance to the combiner defined in
+   draft-ietf-openpgp-pqc.  The change is planned to be integrated into
+   both drafts prior to IETF 121.]
+
 //   multiKeyCombine(ecdhKeyShare, ecdhCipherText, ecdhPublicKey, mlkemKeyShare,
 //                   mlkemCipherText, mlkemPublicKey, fixedInfo)
 //
@@ -607,12 +617,6 @@ mlkemData = mlkemKeyShare || mlkemCipherText || mlkemPublicKey
 KEK = SHA3-256(counter || ecdhData || mlkemData || fixedInfo)
 return KEK
 
-   Note that the values ecdhKeyShare defined in Section 5.1.1 and
-   mlkemKeyShare defined in Section 5.1.2 already use the relative
-   ciphertext in the derivation.  The ciphertext and public keys are by
-   design included again in the key combiner to provide a robust
-   security proof.
-
    The value of counter MUST be set to the following octet sequence:
 
    counter :=  00 00 00 01
@@ -625,9 +629,9 @@ return KEK
    component keys.  ML-KEM key generation follows the specification
    [FIPS-203] and the artifacts are encoded as fixed-length octet
    strings as defined in Section 5.1.2.  For ECC this is done following
-   the relative specification in [RFC7748], [SP800-186], or [RFC5639],
-   and encoding the outputs as fixed-length octet strings in the format
-   specified in Table 3 or Table 4.
+   the relative specification in [SP800-186] or [RFC5639], and encoding
+   the outputs as fixed-length octet strings in the format specified in
+   Table 3 or Table 4.
 
 5.2.4.  Encryption procedure
 
@@ -689,9 +693,9 @@ return KEK
         algorithm ID according to Table 6
 
    6.   Parse eccCipherText, mlkemCipherText, and C from encryptedKey
-        encoded as eccCipherText || mlkemCipherText || len(C) (||
-        symAlgId) || C as specified in Section 5.3.1, where symAlgId is
-        present only in the case of a v3 PKESK.
+        encoded as eccCipherText || mlkemCipherText || len(symAlgId, C)
+        (|| symAlgId) || C as specified in Section 5.3.1, where symAlgId
+        is present only in the case of a v3 PKESK.
 
    7.   Compute (eccKeyShare) := ECC-KEM.Decaps(eccCipherText,
         eccSecretKey, eccPublicKey)
@@ -780,6 +784,24 @@ return KEK
    (verified) <- ECDSA.Verify(ecdsaPublicKey, ecdsaSignatureR,
                               ecdsaSignatureS, dataDigest)
 
+   Here, the operation ECDSA.Sign() is defined as the algorithm in
+   Section "6.4.1 ECDSA Signature Generation Algorithm" of
+   [SP800-186-5], however, excluding Step 1: H = Hash(M) in that
+   algorithm specification, as in this specification the message digest
+   H is a direct input to the operation ECDSA.Sign().  Equivalently, the
+   operation ECDSA.Sign() can be understood as representing the
+   algorithm under Section "4.2.1.1.  Signature Algorithm" in
+   [TR-03111], again with the difference that in this specification the
+   message digest H_Tau(M) appearing in Step 5 of the algorithm
+   specification is the direct input to the operation ECDSA.Sign() and
+   thus the hash computation is not carried out.  The same statement
+   holds for the definition of the verification operation
+   ECDSA.Verify(): it is given either through the algorithm defined in
+   Section "6.4.2 ECDSA Signature Verification Algorithm" of
+   [SP800-186-5] omitting the message digest computation in Step 2 or by
+   the algorithm in Section "4.2.1.2.  Verification Algorithm" of
+   [TR-03111] omitting the message digest computation in Step 3.
+
    The public keys MUST be encoded in SEC1 format as defined in section
    Section 2.1.1.  The secret key, as well as both values R and S of the
    signature MUST each be encoded as a big-endian integer in a fixed-
@@ -797,10 +819,8 @@ return KEK
    |          P-256)|               |     |      |      |         |         |
    +----------------+---------------+-----+------+------+---------+---------+
    |    TBD (ML-DSA-|NIST P-384     |48   |97    |48    |48       |48       |
-   |  65+ECDSA-NIST-|               |     |      |      |         |         |
-   |          P-384)|               |     |      |      |         |         |
-   +----------------+---------------+-----+------+------+---------+---------+
-   |    TBD (ML-DSA-|NIST P-384     |48   |97    |48    |48       |48       |
+   |65+ECDSA-NIST-P-|               |     |      |      |         |         |
+   |     384,ML-DSA-|               |     |      |      |         |         |
    |  87+ECDSA-NIST-|               |     |      |      |         |         |
    |          P-384)|               |     |      |      |         |         |
    +----------------+---------------+-----+------+------+---------+---------+
@@ -871,7 +891,8 @@ return KEK
         |    TBD (ML-DSA-87 IDs) | SHA3-512      | 14            |
         +------------------------+---------------+---------------+
 
-        Table 9: Binding between ML-DSA and signature data digest
+          Table 9: Binding between ML-DSA + ECDSA and signature
+                               data digest
 
 6.2.2.  Key generation procedure
 
@@ -879,9 +900,9 @@ return KEK
    component keys.  ML-DSA key generation follows the specification
    [FIPS-204] and the artifacts are encoded as fixed-length octet
    strings as defined in Section 6.1.2.  For ECC this is done following
-   the relative specification in [RFC7748], [SP800-186], or [RFC5639],
-   and encoding the artifacts as specified in Section 6.1.1 as fixed-
-   length octet strings.
+   the relative specification in [SP800-186] or [RFC5639], and encoding
+   the artifacts as specified in Section 6.1.1 as fixed-length octet
+   strings.
 
 6.2.3.  Signature Generation
 
@@ -972,33 +993,26 @@ return KEK
    algorithms denote fields that are only conditionally contained in the
    data structure.
 
-   TODO:update with agreed-on algorithms
+   [Note: Once the working group has agreed on the actual algorithm
+   choice, the following table with the requested IANA updates will be
+   filled out.]
 
-   +===+=============+==========+==========+==========+======+=========+
-   |ID |Algorithm    |Public Key|    Secret| Signature| PKESK|Reference|
-   |   |             |    Format|       Key|    Format|Format|         |
-   |   |             |          |    Format|          |      |         |
-   +===+=============+==========+==========+==========+======+=========+
-   |TBD|ML-DSA-65+TBD| 32 octets| 32 octets| 64 octets|   N/A|  Section|
-   |   |             |TBD public|       TBD|       TBD|      |      6.2|
-   |   |             |key , 1952|    secret| signature|      |         |
-   |   |             |octets ML-|     key ,|    , 3293|      |         |
-   |   |             |    DSA-65|      4032|octets ML-|      |         |
-   |   |             |public key|    octets|    DSA-65|      |         |
-   |   |             | (Table 8)| ML-DSA-65| signature|      |         |
-   |   |             |          |    secret| (Table 8)|      |         |
-   |   |             |          | (Table 8)|          |      |         |
-   +---+-------------+----------+----------+----------+------+---------+
-   |TBD|ML-DSA-87+TBD| 57 octets| 57 octets|114 octets|   N/A|  Section|
-   |   |             |TBD public|       TBD|       TBD|      |      6.2|
-   |   |             |key , 2592|    secret|signature,|      |         |
-   |   |             |octets ML-|     key ,|      4595|      |         |
-   |   |             |    DSA-87|      4896|octets ML-|      |         |
-   |   |             |public key|    octets|    DSA-87|      |         |
-   |   |             | (Table 8)| ML-DSA-87| signature|      |         |
-   |   |             |          |    secret| (Table 8)|      |         |
-   |   |             |          | (Table 8)|          |      |         |
-   +---+-------------+----------+----------+----------+------+---------+
+   +===+===============+==========+=========+=========+======+=========+
+   |ID | Algorithm     |    Public|   Secret|Signature| PKESK|Reference|
+   |   |               |       Key|      Key|   Format|Format|         |
+   |   |               |    Format|   Format|         |      |         |
+   +===+===============+==========+=========+=========+======+=========+
+   |TBD| ML-DSA-65+TBD |       TBD|      TBD|      TBD|   N/A|  Section|
+   |   |               |    octets|   octets|   octets|      |      6.2|
+   |   |               |       TBD|      TBD|      TBD|      |         |
+   |   |               |    public|   secret|signature|      |         |
+   |   |               | key , TBD|key , TBD|    , TBD|      |         |
+   |   |               |    octets|   octets|   octets|      |         |
+   |   |               | ML-DSA-65|ML-DSA-65|ML-DSA-65|      |         |
+   |   |               |    public|   secret|signature|      |         |
+   |   |               |       key|(Table 8)|(Table 8)|      |         |
+   |   |               | (Table 8)|         |         |      |         |
+   +---+---------------+----------+---------+---------+------+---------+
 
     Table 10: IANA updates for registry 'OpenPGP Public Key Algorithms'
 
@@ -1006,8 +1020,7 @@ return KEK
 
 10.  Contributors
 
-   Carl-Daniel Hailfinger (BSI)
-   Andreas Huelsing (TU Eindhoven)
+   Stavros Kousidis
 
 11.  References
 
@@ -1112,6 +1125,12 @@ return KEK
               Special Publication 800-186 , February 2023,
               <https://doi.org/10.6028/NIST.SP.800-186>.
 
+   [SP800-186-5]
+              Information Technology Laboratory, National Institute of
+              Standards and Technology, "Digital Signature Standard
+              (DSS)", NIST Special Publication 800-186 , February 2023,
+              <https://doi.org/10.6028/NIST.FIPS.186-5>.
+
    [SP800-56A]
               Barker, E., Chen, L., Roginsky, A., Vassilev, A., and R.
               Davis, "Recommendation for Pair-Wise Key-Establishment
@@ -1124,6 +1143,14 @@ return KEK
               Key-Derivation Methods in Key-Establishment Schemes", NIST
               Special Publication 800-56C Rev. 2 , August 2020,
               <https://doi.org/10.6028/NIST.SP.800-56Cr2>.
+
+   [TR-03111] Federal Office for Information Security, Germany,
+              "Technical Guideline BSI TR-03111 – Elliptic Curve
+              Cryptography, Version 2.1", June 2018,
+              <https://www.bsi.bund.de/DE/Themen/Unternehmen-und-
+              Organisationen/Standards-und-Zertifizierung/Technische-
+              Richtlinien/TR-nach-Thema-sortiert/tr03111/TR-
+              03111_node.html>.
 
 Appendix A.  Test Vectors
 
