@@ -313,9 +313,9 @@ This document defines PQ/T composite schemes based on ML-KEM and ML-DSA combined
 
 This document defines PQ/T composite schemes based on ML-KEM and ML-DSA combined with ECDH and ECDSA using the NIST and Brainpool domain parameters for the OpenPGP protocol.
 As such it extends [draft-ietf-openpgp-pqc-03], which introduces post-quantum cryptography in OpenPGP.
-The ML-KEM and ML-DSA composite schemes defined in that document are build with ECC algorithms using the Edwards Curves defined in {{RFC8032}} and {{RFC7748}}.
+The ML-KEM and ML-DSA composite schemes defined in that document are built with ECC algorithms using the Edwards Curves defined in {{RFC8032}} and {{RFC7748}}.
 This document extends the set of algorithms given in [draft-ietf-openpgp-pqc-03] by further combinations of ML-KEM and ML-DSA with the NIST {{SP800-186}} and Brainpool {{RFC5639}} domain parameters.
-The support of NIST and Brainpool domain parameters is required in various applications related to certain regulartory environments.
+The support of NIST and Brainpool domain parameters is required in various applications related to certain regulatory environments.
 
 ## Conventions used in this Document
 
@@ -563,7 +563,7 @@ TBD (ML-KEM-1024+ECDH-brainpoolP384r1)    | ML-KEM-1024  | ecdhKem   | brainpool
 
 The ML-KEM + ECC composite public-key encryption schemes are built according to the following principal design:
 
- - The ML-KEM encapsulation algorithm is invoked to create a ML-KEM ciphertext together with a ML-KEM symmetric key share.
+ - The ML-KEM encapsulation algorithm is invoked to create an ML-KEM ciphertext together with an ML-KEM symmetric key share.
 
  - The encapsulation algorithm of an ECDH-KEM is invoked to create an ECC ciphertext together with an ECC symmetric key share.
 
@@ -594,7 +594,7 @@ The value of `domSeparation` is the UTF-8 encoding of the string "OpenPGPComposi
 
 ### Key combiner {#kem-key-combiner}
 
-For the composite KEM schemes defined in {{kem-alg-specs}} the following procedure, which is idententical to one described in [draft-ietf-openpgp-pqc-03], MUST be used to compute the KEK that wraps a session key.
+For the composite KEM schemes defined in {{kem-alg-specs}} the following procedure, which is identical to one described in [draft-ietf-openpgp-pqc-03], MUST be used to compute the KEK that wraps a session key.
 The construction is a one-step key derivation function compliant to {{SP800-56C}}, Section 4, based on SHA3-256.
 It is given by the following algorithm, which computes the key encryption key `KEK` that is used to wrap, i.e., encrypt, the session key.
 
@@ -637,7 +637,7 @@ For ECC this is done following the relative specification in {{RFC7748}}, {{SP80
 
 ### Encryption procedure {#ecc-mlkem-encryption}
 
-The procedure to perform public-key encryption with a ML-KEM + ECC composite scheme is as follows:
+The procedure to perform public-key encryption with an ML-KEM + ECC composite scheme is as follows:
 
  1. Take the recipient's authenticated public-key packet `pkComposite` and `sessionKey` as input
 
@@ -661,7 +661,7 @@ The procedure to perform public-key encryption with a ML-KEM + ECC composite sch
 
 ### Decryption procedure
 
-The procedure to perform public-key decryption with a ML-KEM + ECC composite scheme is as follows:
+The procedure to perform public-key decryption with an ML-KEM + ECC composite scheme is as follows:
 
  1. Take the matching PKESK and own secret key packet as input
 
@@ -815,7 +815,7 @@ To sign a message `M` with ML-DSA + ECDSA the following sequence of operations h
 ### Signature Verification
 
 
-To verify a ML-DSA + ECDSA signature the following sequence of operations has to be performed:
+To verify an ML-DSA + ECDSA signature the following sequence of operations has to be performed:
 
  1. Verify the ECDSA signature with `ECDSA.Verify()` from {{ecdsa-signature}}
 
