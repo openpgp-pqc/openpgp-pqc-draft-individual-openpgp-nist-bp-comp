@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-07-04T00:55:12.834334+00:00",
+  "timestamp": "2024-07-07T00:59:56.288723+00:00",
   "repo": "openpgp-pqc/draft-ehlen-openpgp-nist-bp-comp",
   "labels": [
     {
@@ -55,32 +55,48 @@
       "id": "I_kwDOL4Ooz86OXbfd",
       "title": "Update the KDFs for the combined KEMs to use SHA3-512 for all 3 parameter sets",
       "url": "https://github.com/openpgp-pqc/draft-ehlen-openpgp-nist-bp-comp/issues/4",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "falko-strenzke",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "As suggested by Quynh. Reason: SHA3-512 is used inside ML-KEM in any case.\r\n\r\n@QuynhDangNIST ",
       "createdAt": "2024-07-03T12:29:39Z",
-      "updatedAt": "2024-07-03T12:29:39Z",
-      "closedAt": null,
-      "comments": []
+      "updatedAt": "2024-07-04T11:35:09Z",
+      "closedAt": "2024-07-04T11:35:09Z",
+      "comments": [
+        {
+          "author": "sehlen",
+          "authorAssociation": "COLLABORATOR",
+          "body": "We discussed this and decided to not make any changes at this point.",
+          "createdAt": "2024-07-04T11:35:09Z",
+          "updatedAt": "2024-07-04T11:35:09Z"
+        }
+      ]
     },
     {
       "number": 5,
       "id": "I_kwDOL4Ooz86OXeGP",
       "title": "Clarify that `ECDSA.Sign(ecdsaSecretKey, dataDigest)` does not involve a further hashing step",
       "url": "https://github.com/openpgp-pqc/draft-ehlen-openpgp-nist-bp-comp/issues/5",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "falko-strenzke",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
-      "body": "Our document in the current state does not actually clearly define the ECDSA signature. It mentions\r\n\r\n        (ecdsaSignatureR, ecdsaSignatureS) <- ECDSA.Sign(ecdsaSecretKey, dataDigest)\r\n\r\nwithout saying what ECDSA.Sign() actually means. In my understanding is that this is raw signing and no further hash is calculated on dataDigest. But indeed that needs clarification in the document.\r\n\r\nI would like to hear also Johannes judgement if what I say above about the hashing is correct.\r\n\r\n@TJ-91 ",
+      "body": "Our document in the current state does not actually clearly define the ECDSA signature. It mentions\r\n\r\n        (ecdsaSignatureR, ecdsaSignatureS) <- ECDSA.Sign(ecdsaSecretKey, dataDigest)\r\n\r\nwithout saying what ECDSA.Sign() actually means. In my understanding is that this is raw signing and no further hash is calculated on dataDigest. But indeed that needs clarification in the document.\r\n\r\nFor NIST definition of ECDSA sign we should use: https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.186-5.pdf#page=33. We might also point to the BSI's specification in parallel: https://www.bsi.bund.de/SharedDocs/Downloads/EN/BSI/Publications/TechGuidelines/TR03111/BSI-TR-03111_V-2-1_pdf.pdf?__blob=publicationFile&v=1#page=22\r\n\r\nI would like to hear also Johannes judgement if what I say above about the hashing is correct.\r\n\r\n@TJ-91 ",
       "createdAt": "2024-07-03T12:34:54Z",
-      "updatedAt": "2024-07-03T12:34:54Z",
-      "closedAt": null,
-      "comments": []
+      "updatedAt": "2024-07-05T14:17:42Z",
+      "closedAt": "2024-07-05T14:17:42Z",
+      "comments": [
+        {
+          "author": "TJ-91",
+          "authorAssociation": "COLLABORATOR",
+          "body": "I agree, and this needs to be clarified.",
+          "createdAt": "2024-07-04T12:20:04Z",
+          "updatedAt": "2024-07-04T12:20:04Z"
+        }
+      ]
     },
     {
       "number": 6,
@@ -94,7 +110,7 @@
       "labels": [],
       "body": "As pointed out by Quynh: For SHA3-(512/256), the only requirement is that the input to the hash function must be:  counter|| ECC shared secret output || ML-KEM shared secret output || anything else. So, Z is the ECC shared secret output || ML-KEM shared secret output. \r\n\r\nSee also\r\nhttps://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-56Cr2.pdf#page=22",
       "createdAt": "2024-07-03T12:59:14Z",
-      "updatedAt": "2024-07-03T13:07:32Z",
+      "updatedAt": "2024-07-04T13:08:43Z",
       "closedAt": null,
       "comments": [
         {
@@ -103,6 +119,13 @@
           "body": "@wussler @TJ-91 This will also affect the main draft. It means anything beyond the shared secrets has to be placed in the fixedInfo according to NIST.SP.800-56Cr2.",
           "createdAt": "2024-07-03T13:07:31Z",
           "updatedAt": "2024-07-03T13:07:31Z"
+        },
+        {
+          "author": "falko-strenzke",
+          "authorAssociation": "COLLABORATOR",
+          "body": "This LAMPS issue is addressing the same problem: https://github.com/lamps-wg/draft-composite-kem/issues/26",
+          "createdAt": "2024-07-04T13:08:41Z",
+          "updatedAt": "2024-07-04T13:08:41Z"
         }
       ]
     }
@@ -113,24 +136,26 @@
       "id": "PR_kwDOL4Ooz85wxTzB",
       "title": "Consistent introduction of ML-KEM-512, various updates",
       "url": "https://github.com/openpgp-pqc/draft-ehlen-openpgp-nist-bp-comp/pull/1",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "falko-strenzke",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "consistent introd. of ML-KEM-512, updates from core pqc draft, Stephan as author, referencing of draft-ietf-openpgp-pqc-03, added introduction, etc.",
       "createdAt": "2024-05-28T14:01:30Z",
-      "updatedAt": "2024-07-03T12:11:20Z",
+      "updatedAt": "2024-07-04T11:05:26Z",
       "baseRepository": "openpgp-pqc/draft-ehlen-openpgp-nist-bp-comp",
       "baseRefName": "main",
       "baseRefOid": "78a0bb0671677fc8ecd4e6716a08a575d4a2b9ec",
       "headRepository": "openpgp-pqc/draft-ehlen-openpgp-nist-bp-comp",
       "headRefName": "update-key-comb-etc",
       "headRefOid": "0802fd259fb712f5077a5ca4bae526af153308b0",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2024-07-04T11:05:25Z",
+      "mergedAt": "2024-07-04T11:05:25Z",
+      "mergedBy": "falko-strenzke",
+      "mergeCommit": {
+        "oid": "a815e623d15adf85b8379e5e9ff6daf2af259057"
+      },
       "comments": [
         {
           "author": "falko-strenzke",
@@ -214,10 +239,10 @@
           },
           "author": "QuynhDangNIST",
           "authorAssociation": "COLLABORATOR",
-          "state": "CHANGES_REQUESTED",
+          "state": "DISMISSED",
           "body": "For NIST, I have: ML-KEM-512 + P-256, ML-KEM-768 + P-384, ML-KEM-1024 + P-384, ML-DSA-44 + NIST-256, ML-DSA-65 + P-384 and ML-DSA-87 + P-384. How do I make the needed changes in this draft ? ",
           "createdAt": "2024-06-27T15:59:16Z",
-          "updatedAt": "2024-06-27T15:59:16Z",
+          "updatedAt": "2024-07-04T10:56:26Z",
           "comments": []
         },
         {
@@ -231,6 +256,32 @@
           "body": "\"consistent introd. of ML-KEM-512, updates from core pqc draft, Stephan as author, referencing of draft-ietf-openpgp-pqc-03, added introduction, etc.\"  . The changes in introduction text look fine to me. ",
           "createdAt": "2024-07-03T12:11:20Z",
           "updatedAt": "2024-07-03T12:11:20Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOL4Ooz86AppFv",
+          "commit": {
+            "abbreviatedOid": "0802fd2"
+          },
+          "author": "TJ-91",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2024-07-04T09:07:58Z",
+          "updatedAt": "2024-07-04T09:07:58Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOL4Ooz86AqIeG",
+          "commit": {
+            "abbreviatedOid": "0802fd2"
+          },
+          "author": "sehlen",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2024-07-04T09:58:27Z",
+          "updatedAt": "2024-07-04T09:58:27Z",
           "comments": []
         }
       ]
@@ -273,7 +324,7 @@
       "labels": [],
       "body": "Update the prehash function to SHA3-384 for ML-DSA-44 so that level 2 security is achieved.",
       "createdAt": "2024-06-28T18:39:05Z",
-      "updatedAt": "2024-06-28T18:39:06Z",
+      "updatedAt": "2024-07-04T11:08:44Z",
       "baseRepository": "openpgp-pqc/draft-ehlen-openpgp-nist-bp-comp",
       "baseRefName": "ML-KEM-DSA-NIST-Curves",
       "baseRefOid": "34fc8d59b655883c777daa3be22ee6efd75c8c67",
@@ -285,7 +336,222 @@
       "mergedBy": null,
       "mergeCommit": null,
       "comments": [],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "PRR_kwDOL4Ooz86Aqqhd",
+          "commit": {
+            "abbreviatedOid": "99e3f48"
+          },
+          "author": "falko-strenzke",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-07-04T11:07:10Z",
+          "updatedAt": "2024-07-04T11:07:10Z",
+          "comments": [
+            {
+              "originalPosition": 5,
+              "body": "SHA3-384 is not defined for OpenPGP",
+              "createdAt": "2024-07-04T11:07:10Z",
+              "updatedAt": "2024-07-04T11:07:10Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 7,
+      "id": "PR_kwDOL4Ooz850hZ_s",
+      "title": "multiple corrections from proof-reading, also fixes #5",
+      "url": "https://github.com/openpgp-pqc/draft-ehlen-openpgp-nist-bp-comp/pull/7",
+      "state": "MERGED",
+      "author": "falko-strenzke",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "fixes #5 and addresses that #6 will be resolved before IETF 121",
+      "createdAt": "2024-07-05T10:13:14Z",
+      "updatedAt": "2024-07-05T14:17:52Z",
+      "baseRepository": "openpgp-pqc/draft-ehlen-openpgp-nist-bp-comp",
+      "baseRefName": "main",
+      "baseRefOid": "a815e623d15adf85b8379e5e9ff6daf2af259057",
+      "headRepository": "openpgp-pqc/draft-ehlen-openpgp-nist-bp-comp",
+      "headRefName": "corrections-falko",
+      "headRefOid": "5fb5bb4da2e62698bb11abdc84f8749c398320c7",
+      "closedAt": "2024-07-05T14:17:42Z",
+      "mergedAt": "2024-07-05T14:17:41Z",
+      "mergedBy": "falko-strenzke",
+      "mergeCommit": {
+        "oid": "1dfb0795dcda47b9ebfd06b897797edd998846c3"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOL4Ooz86Axbv0",
+          "commit": {
+            "abbreviatedOid": "cc34b9e"
+          },
+          "author": "falko-strenzke",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-07-05T10:28:18Z",
+          "updatedAt": "2024-07-05T10:28:18Z",
+          "comments": [
+            {
+              "originalPosition": 75,
+              "body": "We don't need to justify the construction here, because we are simply adopting it from draft-ietf-openpgp-pqc.",
+              "createdAt": "2024-07-05T10:28:18Z",
+              "updatedAt": "2024-07-05T10:28:19Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOL4Ooz86AyN6D",
+          "commit": {
+            "abbreviatedOid": "cc34b9e"
+          },
+          "author": "TJ-91",
+          "authorAssociation": "COLLABORATOR",
+          "state": "DISMISSED",
+          "body": "looks good",
+          "createdAt": "2024-07-05T12:41:50Z",
+          "updatedAt": "2024-07-05T13:02:23Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOL4Ooz86AyUD-",
+          "commit": {
+            "abbreviatedOid": "cc34b9e"
+          },
+          "author": "TJ-91",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-07-05T12:56:12Z",
+          "updatedAt": "2024-07-05T12:56:12Z",
+          "comments": [
+            {
+              "originalPosition": 153,
+              "body": "```suggestion\r\n# Contributors\r\nStavros Kousidis\r\n```",
+              "createdAt": "2024-07-05T12:56:12Z",
+              "updatedAt": "2024-07-05T12:56:12Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOL4Ooz86Ayo8W",
+          "commit": {
+            "abbreviatedOid": "5fb5bb4"
+          },
+          "author": "QuynhDangNIST",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-07-05T13:44:36Z",
+          "updatedAt": "2024-07-05T13:44:37Z",
+          "comments": [
+            {
+              "originalPosition": 75,
+              "body": "Looks good to me. ",
+              "createdAt": "2024-07-05T13:44:37Z",
+              "updatedAt": "2024-07-05T13:44:37Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOL4Ooz86AyxDj",
+          "commit": {
+            "abbreviatedOid": "5fb5bb4"
+          },
+          "author": "QuynhDangNIST",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2024-07-05T14:01:23Z",
+          "updatedAt": "2024-07-05T14:01:23Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOL4Ooz86Ay23c",
+          "commit": {
+            "abbreviatedOid": "5fb5bb4"
+          },
+          "author": "TJ-91",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2024-07-05T14:14:48Z",
+          "updatedAt": "2024-07-05T14:14:48Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 8,
+      "id": "PR_kwDOL4Ooz850ikjg",
+      "title": "fix several typos",
+      "url": "https://github.com/openpgp-pqc/draft-ehlen-openpgp-nist-bp-comp/pull/8",
+      "state": "OPEN",
+      "author": "TJ-91",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2024-07-05T13:43:48Z",
+      "updatedAt": "2024-07-05T20:53:53Z",
+      "baseRepository": "openpgp-pqc/draft-ehlen-openpgp-nist-bp-comp",
+      "baseRefName": "main",
+      "baseRefOid": "a815e623d15adf85b8379e5e9ff6daf2af259057",
+      "headRepository": "openpgp-pqc/draft-ehlen-openpgp-nist-bp-comp",
+      "headRefName": "corrections-johannes",
+      "headRefOid": "c799a86b9384043bf367853ef0a60457a5f21d99",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOL4Ooz86Aypnb",
+          "commit": {
+            "abbreviatedOid": "c799a86"
+          },
+          "author": "falko-strenzke",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2024-07-05T13:46:13Z",
+          "updatedAt": "2024-07-05T13:46:13Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOL4Ooz86A0hPQ",
+          "commit": {
+            "abbreviatedOid": "c799a86"
+          },
+          "author": "sehlen",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "This is fine to merge, if you don\"t agree with my suggestion, this can be made an additional issue.",
+          "createdAt": "2024-07-05T20:52:21Z",
+          "updatedAt": "2024-07-05T20:53:53Z",
+          "comments": [
+            {
+              "originalPosition": 17,
+              "body": "```suggestion\r\n - The ML-KEM encapsulation algorithm is invoked to create an ML-KEM ciphertext together with an ML-KEM shared secret key.\r\n```\r\n\r\nThe usual KEM terminolofy is \"shared secret\" and in FIPS 203 ipd they write \"share secret key\".",
+              "createdAt": "2024-07-05T20:52:21Z",
+              "updatedAt": "2024-07-05T20:53:53Z"
+            },
+            {
+              "originalPosition": 17,
+              "body": "This might have to be applied to other places as well. I don't object to leaving it as is, but I think \"shared secret (key)\" would be better.",
+              "createdAt": "2024-07-05T20:53:11Z",
+              "updatedAt": "2024-07-05T20:53:53Z"
+            }
+          ]
+        }
+      ]
     }
   ]
 }
