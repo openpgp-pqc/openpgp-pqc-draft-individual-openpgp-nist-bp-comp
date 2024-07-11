@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-07-09T00:55:56.777989+00:00",
+  "timestamp": "2024-07-11T00:56:33.360339+00:00",
   "repo": "openpgp-pqc/draft-ehlen-openpgp-nist-bp-comp",
   "labels": [
     {
@@ -157,7 +157,7 @@
       "labels": [],
       "body": "Quynh reported that the ECC ciphertext in the current design is fed both to the hash internal to the ECC KEM and to the key combiner of the KEM. We should remove one of these.\r\n",
       "createdAt": "2024-07-08T06:57:56Z",
-      "updatedAt": "2024-07-08T07:00:16Z",
+      "updatedAt": "2024-07-10T10:09:30Z",
       "closedAt": null,
       "comments": [
         {
@@ -166,6 +166,27 @@
           "body": "Removing the ciphertext from the hashing step in the ECC KEM would be my preferred solution. The reason is that as I understand it, the WG will require a fully generic KEM combiner that will work with any future KEM. So dropping the ciphertext input from the combiner would probably not be the best idea.\r\n\r\nIn that case we could simply remove the whole hashing step of the ECC algorithm and just feed X (with fixed length) to the KEM combiner, since also the public keys are currently fed into both the ECC hashing step and the KEM combiner. \r\n\r\n@QuynhDangNIST Do you agree?\r\n\r\nAt least I don't see that the ECC-KEM that we define here will be used in any different context so that outputting the raw coordinate X shouldn't be a problem. ",
           "createdAt": "2024-07-08T07:00:15Z",
           "updatedAt": "2024-07-08T07:00:15Z"
+        },
+        {
+          "author": "sehlen",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Hi,\r\n\r\nsince I\u2019m on vacation I won\u2019t look closer into this for now but I think\r\nthat the ECC-KEM ist modeled after Cramer-Shoup and might need this step to\r\ngive a CCA-secure KEM.  I might of course misremember this but it might be\r\nworth checking before any decision is made. Note that we need the CCA\r\nsecurity to obtain a CCA-secure hybrid KEM in case Kyber fails.\r\n\r\nStephan\r\n\r\nOn 8. Jul 2024, at 09:00, Falko Strenzke ***@***.***> wrote:\r\n\r\n\ufeff\r\n\r\nRemoving the ciphertext from the hashing step in the ECC KEM would be my\r\npreferred solution. The reason is that as I understand it, the WG will\r\nrequire a fully generic KEM combiner that will work with any future KEM. So\r\ndropping the ciphertext input from the combiner would probably not be the\r\nbest idea.\r\n\r\nIn that case we could simply remove the whole hashing step of the ECC\r\nalgorithm and just feed X (with fixed length) to the KEM combiner, since\r\nalso the public keys are currently fed into both the ECC hashing step and\r\nthe KEM combiner.\r\n\r\n@QuynhDangNIST <https://github.com/QuynhDangNIST> Do you agree?\r\n\r\nAt least I don't see that the ECC-KEM that we define here will be used in\r\nany different context so that outputting the raw coordinate X shouldn't be\r\na problem.\r\n\r\n\u2014\r\nReply to this email directly, view it on GitHub\r\n<https://github.com/openpgp-pqc/draft-ehlen-openpgp-nist-bp-comp/issues/10#issuecomment-2213190813>,\r\nor unsubscribe\r\n<https://github.com/notifications/unsubscribe-auth/AAS3NUIE7SKWPDTD4QBGIFLZLI2JLAVCNFSM6AAAAABKQF6UGGVHI2DSMVQWIX3LMV43OSLTON2WKQ3PNVWWK3TUHMZDEMJTGE4TAOBRGM>\r\n.\r\nYou are receiving this because you are subscribed to this thread.Message\r\nID: <openpgp-pqc/draft-ehlen-openpgp-nist-bp-comp/issues/10/2213190813@\r\ngithub.com>\r\n",
+          "createdAt": "2024-07-09T20:50:22Z",
+          "updatedAt": "2024-07-09T20:50:22Z"
+        },
+        {
+          "author": "falko-strenzke",
+          "authorAssociation": "COLLABORATOR",
+          "body": "> I think that the ECC-KEM ist modeled after Cramer-Shoup and might need this step to give a CCA-secure KEM. I might of course misremember this but it might be worth checking before any decision is made. Note that we need the CCA security to obtain a CCA-secure hybrid KEM in case Kyber fails.\r\n\r\nI think this is satisfied because the KDF given by the KEM combiner (given by SHA3-256) receives both the public keys of both schemes and the ciphertexts of both schemes.  So this means the we would actually compute in the KDF:\r\n\r\n```\r\nSHA3-256(counter || X || ss_kyber || ecPublicKey || ecCiphertext || kyberPublicKey ||\r\nkyberCiphertext || algID || domSep || len(domSep) )\r\n```\r\nwhere X is the raw shared secret from the ECDH. This construction equally fulfills CCA2 security in my understanding.",
+          "createdAt": "2024-07-10T06:47:48Z",
+          "updatedAt": "2024-07-10T07:56:13Z"
+        },
+        {
+          "author": "QuynhDangNIST",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Hi all,\n\nThe only 1 point I would like to make here is that the KDF suggested in Falko's email below is NIST-compliant.\n\nThe counter is allowed to be skipped when the hash function is executed only once as specified on page 159 here: https://csrc.nist.gov/csrc/media/Projects/cryptographic-module-validation-program/documents/fips%20140-3/FIPS%20140-3%20IG.pdf\n\nWhen X is a pseudorandom key, not a raw shared secret,  KMAC-KDF in SP 800-108 (on page 11 here: https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-108r1-upd1.pdf ) is an approved KDF where the Key Derivation Key (K) is a concatenation of multiple pseudorandom keys as specified in Section 6.3 pages 21 & 22 here :  https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-133r2.pdf\n\nSo, if we delete the step 3 in ECDH-KEM ( Set the output eccKeyShare to Hash(X || eccCipherText || eccPublicKey),  then Falko's suggested KDF is NIST-compliant.\n\nIf we keep the step 3, eccKeyShare is a pseudorandom key and if eccKeyShare takes the place of X in Falko's suggested KDF, the KDF is not NIST-compliant at this point, but the KMAC-KDF mentioned above is NIST-compliant.\n\nRegards,\nQuynh.\n\nFrom: Falko Strenzke ***@***.***>\nSent: Wednesday, July 10, 2024 2:48 AM\nTo: openpgp-pqc/draft-ehlen-openpgp-nist-bp-comp ***@***.***>\nCc: Dang, Quynh H. (Fed) ***@***.***>; Mention ***@***.***>\nSubject: Re: [openpgp-pqc/draft-ehlen-openpgp-nist-bp-comp] remove double ECC ciphertext processing in combined KEM (Issue #10)\n\n\nI think that the ECC-KEM ist modeled after Cramer-Shoup and might need this step to give a CCA-secure KEM. I might of course misremember this but it might be worth checking before any decision is made. Note that we need the CCA security to obtain a CCA-secure hybrid KEM in case Kyber fails.\n\nI think this is satisfied because the KDF given by the KEM combiner (given by SHA3-256) receives both the public keys of both schemes and the ciphertexts of both schemes. So this means the we would actually compute in the KDF:\n\nSHA3-256(X || ss_kyber || ecPublicKey || ecCiphertext || kyberPublicKey ||kyberCiphertext || algID || domSep || len(domSep) )\n\nwhere X is the raw shared secret from the ECDH. This construction equally fulfills CCA2 security in my understanding.\n\n-\nReply to this email directly, view it on GitHub<https://github.com/openpgp-pqc/draft-ehlen-openpgp-nist-bp-comp/issues/10#issuecomment-2219690987>, or unsubscribe<https://github.com/notifications/unsubscribe-auth/AFTFKRAN4FRSO24OOYE6S73ZLTKKTAVCNFSM6AAAAABKQF6UGGVHI2DSMVQWIX3LMV43OSLTON2WKQ3PNVWWK3TUHMZDEMJZGY4TAOJYG4>.\nYou are receiving this because you were mentioned.Message ID: ***@***.***>\n",
+          "createdAt": "2024-07-10T10:09:29Z",
+          "updatedAt": "2024-07-10T10:09:29Z"
         }
       ]
     },
