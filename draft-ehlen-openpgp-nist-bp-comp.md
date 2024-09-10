@@ -406,7 +406,7 @@ Furthermore, when performing the explicitly listed operations in {{ecdh-kem}} it
 
 # Supported Public Key Algorithms
 
-This section specifies the composite ML-KEM + ECC and ML-DSA + ECC schemes.
+This section specifies the composite ML-KEM+ECDH and ML-DSA+ECDSA schemes.
 All of these schemes are fully specified via their algorithm ID, i.e., they are not parametrized.
 
 ## Algorithm Specifications
@@ -447,12 +447,12 @@ This draft will not be sent to IANA without every listed algorithm having a non-
 
 ## Composite KEMs
 
-The ML-KEM + ECC public-key encryption involves both the ML-KEM and an ECC-based KEM in an a priori non-separable manner.
+The ML-KEM+ECDH public-key encryption involves both the ML-KEM and an ECC-based KEM in an a priori non-separable manner.
 This is achieved via KEM combination, i.e. both key encapsulations/decapsulations are performed in parallel, and the resulting key shares are fed into a key combiner to produce a single shared secret for message encryption.
 
 ## Composite Signatures
 
-The ML-DSA + ECC signature consists of independent ML-DSA and ECC signatures, and an implementation MUST successfully validate both signatures to state that the ML-DSA + ECC signature is valid.
+The ML-DSA+ECDSA signature consists of independent ML-DSA and ECC signatures, and an implementation MUST successfully validate both signatures to state that the ML-DSA+ECDSA signature is valid.
 
 # Composite KEM schemes
 
@@ -462,7 +462,7 @@ The ML-DSA + ECC signature consists of independent ML-DSA and ECC signatures, an
 
 In this section we define the encryption, decryption, and data formats for the ECDH component of the composite algorithms.
 
-{{tab-ecdh-nist-artifacts}} and {{tab-ecdh-brainpool-artifacts}} describe the ECC-KEM parameters and artifact lengths.
+{{tab-ecdh-nist-artifacts}} and {{tab-ecdh-brainpool-artifacts}} describe the ECDH-KEM parameters and artifact lengths.
 
 
 {: title="NIST curves parameters and artifact lengths" #tab-ecdh-nist-artifacts}
@@ -470,7 +470,6 @@ In this section we define the encryption, decryption, and data formats for the E
 | ------------------------ | -------------------------------------------------------- | --------------------------------------------------------          |
 | Algorithm ID reference   | TBD (ML-KEM-512+ECDH-NIST-P-256)                         | TBD (ML-KEM-768+ECDH-NIST-P-384, ML-KEM-1024+ECDH-NIST-P-384, )   |
 | Field size               | 32 octets                                                | 48 octets                                                         |
-| ECC-KEM                  | ecdhKem ({{ecdh-kem}})                                   | ecdhKem ({{ecdh-kem}})                                            |
 | ECDH public key          | 65 octets of SEC1-encoded public point                   | 97 octets of SEC1-encoded public point                            |
 | ECDH secret key          | 32 octets big-endian encoded secret scalar               | 48 octets big-endian encoded secret scalar                        |
 | ECDH ephemeral           | 65 octets of SEC1-encoded ephemeral point                | 97 octets of SEC1-encoded ephemeral point                         |
@@ -483,7 +482,6 @@ In this section we define the encryption, decryption, and data formats for the E
 | ------------------------ | -------------------------------------------------------- | -------------------------------------------------------- |
 | Algorithm ID reference   | TBD (ML-KEM-768+ECDH-brainpoolP256r1)                    | TBD (ML-KEM-1024+ECDH-brainpoolP384r1)                   |
 | Field size               | 32 octets                                                | 48 octets                                                |
-| ECC-KEM                  | ecdhKem ({{ecdh-kem}})                                   | ecdhKem ({{ecdh-kem}})                                   |
 | ECDH public key          | 65 octets of SEC1-encoded public point                   | 97 octets of SEC1-encoded public point                   |
 | ECDH secret key          | 32 octets big-endian encoded secret scalar               | 48 octets big-endian encoded secret scalar               |
 | ECDH ephemeral           | 65 octets of SEC1-encoded ephemeral point                | 97 octets of SEC1-encoded ephemeral point                |
@@ -496,35 +494,35 @@ The SEC1 format for point encoding is defined in {{sec1-format}}.
 The various procedures to perform the operations of an ECC-based KEM are defined in the following subsections.
 Specifically, each of these subsections defines the instances of the following operations:
 
-    (eccCipherText, eccKeyShare) <- ECC-KEM.Encaps(eccPublicKey)
+    (ecdhCipherText, ecdhKeyShare) <- ECDH-KEM.Encaps(ecdhPublicKey)
 
 and
 
-    (eccKeyShare) <- ECC-KEM.Decaps(eccSecretKey, eccCipherText, eccPublicKey)
+    (ecdhKeyShare) <- ECDH-KEM.Decaps(ecdhSecretKey, ecdhCipherText, ecdhPublicKey)
 
-To instantiate `ECC-KEM`, one must select a parameter set from {{tab-ecdh-nist-artifacts}} or {{tab-ecdh-brainpool-artifacts}}.
+To instantiate `ECDH-KEM`, one must select a parameter set from {{tab-ecdh-nist-artifacts}} or {{tab-ecdh-brainpool-artifacts}}.
 
 
 #### ECDH-KEM {#ecdh-kem}
 
-The operation `ecdhKem.Encaps()` is defined as follows:
+The operation `ECDH-KEM.Encaps()` is defined as follows:
 1. Generate an ephemeral key pair {`v`, `V=vG`} as defined in {{SP800-186}} or {{RFC5639}} where `v` is a random scalar with `0 < v < n`, `n` being the base point order of the elliptic curve domain parameters
 
- 2. Compute the shared point `S = vR`, where `R` is the component public key `eccPublicKey`, according to {{SP800-186}} or {{RFC5639}}
+ 2. Compute the shared point `S = vR`, where `R` is the component public key `ecdhPublicKey`, according to {{SP800-186}} or {{RFC5639}}
 
  3. Extract the `X` coordinate from the SEC1 encoded point `S = 04 || X || Y` as defined in section {{sec1-format}}
 
- 4. Set the output `eccCipherText` to the SEC1 encoding of `V`
+ 4. Set the output `ecdhCipherText` to the SEC1 encoding of `V`
 
- 5. Set the output `eccKeyShare` to `Hash(X || eccCipherText || eccPublicKey)`, with `Hash` chosen according to {{tab-ecdh-nist-artifacts}} or {{tab-ecdh-brainpool-artifacts}}
+ 5. Set the output `ecdhKeyShare` to `Hash(X || ecdhCipherText || ecdhPublicKey)`, with `Hash` chosen according to {{tab-ecdh-nist-artifacts}} or {{tab-ecdh-brainpool-artifacts}}
 
-The operation `ecdhKem.Decaps()` is defined as follows:
+The operation `ECDH-KEM.Decaps()` is defined as follows:
 
- 1. Compute the shared Point `S` as `rV`, where `r` is the `eccSecretKey` and `V` is the `eccCipherText`, according to {{SP800-186}} or {{RFC5639}}
+ 1. Compute the shared Point `S` as `rV`, where `r` is the `ecdhSecretKey` and `V` is the `ecdhCipherText`, according to {{SP800-186}} or {{RFC5639}}
 
  2. Extract the `X` coordinate from the SEC1 encoded point `S = 04 || X || Y` as defined in section {{sec1-format}}
 
- 3. Set the output `eccKeyShare` to `Hash(X || eccCipherText || eccPublicKey)`, with `Hash` chosen according to {{tab-ecdh-nist-artifacts}} or {{tab-ecdh-brainpool-artifacts}}
+ 3. Set the output `ecdhKeyShare` to `Hash(X || ecdhCipherText || ecdhPublicKey)`, with `Hash` chosen according to {{tab-ecdh-nist-artifacts}} or {{tab-ecdh-brainpool-artifacts}}
 
 ### ML-KEM {#mlkem-ops}
 
@@ -567,18 +565,18 @@ The procedure to perform `ML-KEM.Decaps()` is as follows:
 
 ## Composite Encryption Schemes with ML-KEM {#ecc-mlkem}
 
-{{kem-alg-specs}} specifies the following ML-KEM + ECC composite public-key encryption schemes:
+{{kem-alg-specs}} specifies the following ML-KEM+ECDH-KEM composite public-key encryption schemes:
 
-{: title="ML-KEM + ECC composite schemes" #tab-mlkem-ecc-composite}
-Algorithm ID reference                    | ML-KEM       | ECC-KEM   | ECC-KEM curve
-----------------------------------------: | ------------ | --------- | --------------
-TBD (ML-KEM-512+ECDH-NIST-P-256)          | ML-KEM-512   | ecdhKem   | NIST P-256
-TBD (ML-KEM-768+ECDH-NIST-P-384)          | ML-KEM-768   | ecdhKem   | NIST P-384
-TBD (ML-KEM-1024+ECDH-NIST-P-384)         | ML-KEM-1024  | ecdhKem   | NIST P-384
-TBD (ML-KEM-768+ECDH-brainpoolP256r1)     | ML-KEM-768   | ecdhKem   | brainpoolP256r1
-TBD (ML-KEM-1024+ECDH-brainpoolP384r1)    | ML-KEM-1024  | ecdhKem   | brainpoolP384r1
+{: title="ML-KEM+ECDH composite schemes" #tab-mlkem-ecc-composite}
+Algorithm ID reference                    | ML-KEM       |  ECDH-KEM curve
+----------------------------------------: | ------------ |  --------------
+TBD (ML-KEM-512+ECDH-NIST-P-256)          | ML-KEM-512   |  NIST P-256
+TBD (ML-KEM-768+ECDH-NIST-P-384)          | ML-KEM-768   |  NIST P-384
+TBD (ML-KEM-1024+ECDH-NIST-P-384)         | ML-KEM-1024  |  NIST P-384
+TBD (ML-KEM-768+ECDH-brainpoolP256r1)     | ML-KEM-768   |  brainpoolP256r1
+TBD (ML-KEM-1024+ECDH-brainpoolP384r1)    | ML-KEM-1024  |  brainpoolP384r1
 
-The ML-KEM + ECC composite public-key encryption schemes are built according to the following principal design:
+The ML-KEM+ECDH composite public-key encryption schemes are built according to the following principal design:
 
  - The ML-KEM encapsulation algorithm is invoked to create an ML-KEM ciphertext together with an ML-KEM symmetric key share.
 
@@ -602,17 +600,17 @@ For ECC this is done following the relative specification in {{SP800-186}} or {{
 
 ### Encryption procedure {#ecc-mlkem-encryption}
 
-The procedure to perform public-key encryption with an ML-KEM + ECC composite scheme is as follows:
+The procedure to perform public-key encryption with an ML-KEM+ECDH composite scheme is as follows:
 
  1. Take the recipient's authenticated public-key packet `pkComposite` and `sessionKey` as input
 
  2. Parse the algorithm ID from `pkComposite`
 
- 3. Extract the `eccPublicKey` and `mlkemPublicKey` component from the algorithm specific data encoded in `pkComposite` with the format specified in {{mlkem-ecc-key}}.
+ 3. Extract the `ecdhPublicKey` and `mlkemPublicKey` component from the algorithm specific data encoded in `pkComposite` with the format specified in {{mlkem-ecc-key}}.
 
- 4. Instantiate the ECC-KEM and the ML-KEM depending on the algorithm ID according to {{tab-mlkem-ecc-composite}}
+ 4. Instantiate the ECDH-KEM and the ML-KEM depending on the algorithm ID according to {{tab-mlkem-ecc-composite}}
 
- 5. Compute `(eccCipherText, eccKeyShare) := ECC-KEM.Encaps(eccPublicKey)`
+ 5. Compute `(ecdhCipherText, ecdhKeyShare) := ECDH-KEM.Encaps(ecdhPublicKey)`
 
  6. Compute `(mlkemCipherText, mlkemKeyShare) := ML-KEM.Encaps(mlkemPublicKey)`
 
@@ -624,7 +622,7 @@ The procedure to perform public-key encryption with an ML-KEM + ECC composite sc
 
 ### Decryption procedure
 
-The procedure to perform public-key decryption with an ML-KEM + ECC composite scheme is as follows:
+The procedure to perform public-key decryption with an ML-KEM+ECDH composite scheme is as follows:
 
  1. Take the matching PKESK and own secret key packet as input
 
@@ -632,13 +630,13 @@ The procedure to perform public-key decryption with an ML-KEM + ECC composite sc
 
  3. Check that the own and the extracted algorithm ID match
 
- 4. Parse the `eccSecretKey` and `mlkemSecretKey` from the algorithm specific data of the own secret key encoded in the format specified in {{mlkem-ecc-key}}
+ 4. Parse the `ecdhSecretKey` and `mlkemSecretKey` from the algorithm specific data of the own secret key encoded in the format specified in {{mlkem-ecc-key}}
 
- 5. Instantiate the ECC-KEM and the ML-KEM depending on the algorithm ID according to {{tab-mlkem-ecc-composite}}
+ 5. Instantiate the ECDH-KEM and the ML-KEM depending on the algorithm ID according to {{tab-mlkem-ecc-composite}}
 
- 6. Parse `eccCipherText`, `mlkemCipherText`, and `C` from `encryptedKey` encoded as `eccCipherText || mlkemCipherText || len(symAlgId, C) (|| symAlgId) || C` as specified in {{ecc-mlkem-pkesk}}, where `symAlgId` is present only in the case of a v3 PKESK.
+ 6. Parse `ecdhCipherText`, `mlkemCipherText`, and `C` from `encryptedKey` encoded as `ecdhCipherText || mlkemCipherText || len(symAlgId, C) (|| symAlgId) || C` as specified in {{ecc-mlkem-pkesk}}, where `symAlgId` is present only in the case of a v3 PKESK.
 
- 7. Compute `(eccKeyShare) := ECC-KEM.Decaps(eccCipherText, eccSecretKey, eccPublicKey)`
+ 7. Compute `(ecdhKeyShare) := ECDH-KEM.Decaps(ecdhCipherText, ecdhSecretKey, ecdhPublicKey)`
 
  8. Compute `(mlkemKeyShare) := ML-KEM.Decaps(mlkemCipherText, mlkemSecretKey)`
 
@@ -664,7 +662,7 @@ The algorithm-specific fields consists of the output of the encryption procedure
 
  - The wrapped session key represented as an octet string.
 
-Note that like in the case of the algorithms X25519 and X448 specified in {{I-D.ietf-openpgp-crypto-refresh}}, for the ML-KEM+ECC composite schemes, in the case of a v3 PKESK packet, the symmetric algorithm identifier is not encrypted.
+Note that like in the case of the algorithms X25519 and X448 specified in {{I-D.ietf-openpgp-crypto-refresh}}, for the ML-KEM+ECDH composite schemes, in the case of a v3 PKESK packet, the symmetric algorithm identifier is not encrypted.
 Instead, it is placed in plaintext after the `mlkemCipherText` and before the length octet preceding the wrapped session key.
 In the case of v3 PKESK packets for ML-KEM composite schemes, the symmetric algorithm used MUST be AES-128, AES-192 or AES-256 (algorithm ID 7, 8 or 9).
 
@@ -744,12 +742,12 @@ TBD                    | ML-DSA-87 | 2592       | 4896       | 4595
 ### Signature data digest {#mldsa-sig-data-digest}
 
 Signature data (i.e. the data to be signed) is digested prior to signing operations, see {{I-D.ietf-openpgp-crypto-refresh}}, Section 5.2.4.
-Composite ML-DSA + ECC signatures MUST use the associated hash algorithm as specified in {{tab-mldsa-hash}} for the signature data digest.
+Composite ML-DSA+ECDSA signatures MUST use the associated hash algorithm as specified in {{tab-mldsa-hash}} for the signature data digest.
 Signatures using other hash algorithms MUST be considered invalid.
 
-An implementation supporting a specific ML-DSA + ECC algorithm MUST also support the matching hash algorithm.
+An implementation supporting a specific ML-DSA+ECDSA algorithm MUST also support the matching hash algorithm.
 
-{: title="Binding between ML-DSA + ECDSA and signature data digest" #tab-mldsa-hash}
+{: title="Binding between ML-DSA+ECDSA and signature data digest" #tab-mldsa-hash}
 Algorithm ID reference | Hash function | Hash function ID reference
 ----------------------:| ------------- | --------------------------
 TBD (ML-DSA-44 IDs)    | SHA3-256      | 12
@@ -765,7 +763,7 @@ For ECC this is done following the relative specification in {{SP800-186}} or {{
 ### Signature Generation
 
 
-To sign a message `M` with ML-DSA + ECDSA the following sequence of operations has to be performed:
+To sign a message `M` with ML-DSA+ECDSA the following sequence of operations has to be performed:
 
  1. Generate `dataDigest` according to {{I-D.ietf-openpgp-crypto-refresh}}, Section 5.2.4
 
@@ -778,22 +776,22 @@ To sign a message `M` with ML-DSA + ECDSA the following sequence of operations h
 ### Signature Verification
 
 
-To verify an ML-DSA + ECDSA signature the following sequence of operations has to be performed:
+To verify an ML-DSA+ECDSA signature the following sequence of operations has to be performed:
 
  1. Verify the ECDSA signature with `ECDSA.Verify()` from {{ecdsa-signature}}
 
  2. Verify the ML-DSA signature with `ML-DSA.Verify()` from {{mldsa-signature}}
 
-As specified in {{composite-signatures}} an implementation MUST validate both signatures, i.e. ECDSA and ML-DSA, successfully to state that a composite ML-DSA + ECC signature is valid.
+As specified in {{composite-signatures}} an implementation MUST validate both signatures, i.e. ECDSA and ML-DSA, successfully to state that a composite ML-DSA+ECDSA signature is valid.
 
 ## Packet Specifications
 
 ### Signature Packet (Tag 2) {#ecc-mldsa-sig-packet}
 
-The composite ML-DSA + ECC schemes MUST be used only with v6 signatures, as defined in [I-D.ietf-openpgp-crypto-refresh].
+The composite ML-DSA+ECDSA schemes MUST be used only with v6 signatures, as defined in [I-D.ietf-openpgp-crypto-refresh].
 
 
-The algorithm-specific v6 signature parameters for ML-DSA + ECDSA signatures consist of:
+The algorithm-specific v6 signature parameters for ML-DSA+ECDSA signatures consist of:
 
  - A fixed-length octet string of the big-endian encoded ECDSA value `R`, whose length depends on the algorithm ID as specified in {{tab-ecdsa-artifacts}}.
 
@@ -803,15 +801,15 @@ The algorithm-specific v6 signature parameters for ML-DSA + ECDSA signatures con
 
 ### Key Material Packets
 
-The composite ML-DSA + ECC schemes MUST be used only with v6 keys, as defined in [I-D.ietf-openpgp-crypto-refresh].
+The composite ML-DSA+ECDSA schemes MUST be used only with v6 keys, as defined in [I-D.ietf-openpgp-crypto-refresh].
 
-The algorithm-specific public key for ML-DSA + ECDSA keys is this series of values:
+The algorithm-specific public key for ML-DSA+ECDSA keys is this series of values:
 
  - A fixed-length octet string representing the ECDSA public key in SEC1 format, as specified in section {{sec1-format}} and with length specified in {{tab-ecdsa-artifacts}}.
 
  - A fixed-length octet string containing the ML-DSA public key, whose length depends on the algorithm ID as specified in {{tab-mldsa-artifacts}}.
 
-The algorithm-specific secret key for ML-DSA + ECDSA keys is this series of values:
+The algorithm-specific secret key for ML-DSA+ECDSA keys is this series of values:
 
  - A fixed-length octet string representing the ECDSA secret key as a big-endian encoded integer, whose length depends on the algorithm used as specified in {{tab-ecdsa-artifacts}}.
 
@@ -830,7 +828,7 @@ TBD
 # IANA Considerations
 
 IANA is requested to add the algorithm IDs defined in {{iana-pubkey-algos}} to the existing registry `OpenPGP Public Key Algorithms`.
-The field specifications enclosed in brackets for the ML-KEM + ECDH composite algorithms denote fields that are only conditionally contained in the data structure.
+The field specifications enclosed in brackets for the ML-KEM+ECDH composite algorithms denote fields that are only conditionally contained in the data structure.
 
 \[Note: Once the working group has agreed on the actual algorithm choice, the following table with the requested IANA updates will be filled out.\]
 
