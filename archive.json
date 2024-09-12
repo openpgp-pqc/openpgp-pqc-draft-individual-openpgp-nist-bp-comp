@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-09-10T01:01:06.732558+00:00",
+  "timestamp": "2024-09-12T01:00:41.100252+00:00",
   "repo": "openpgp-pqc/draft-ehlen-openpgp-nist-bp-comp",
   "labels": [
     {
@@ -649,6 +649,46 @@
               "updatedAt": "2024-07-08T07:06:09Z"
             }
           ]
+        }
+      ]
+    },
+    {
+      "number": 12,
+      "id": "PR_kwDOL4Ooz8568Ci-",
+      "title": "consistent algo names",
+      "url": "https://github.com/openpgp-pqc/draft-ehlen-openpgp-nist-bp-comp/pull/12",
+      "state": "OPEN",
+      "author": "falko-strenzke",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2024-09-10T07:08:23Z",
+      "updatedAt": "2024-09-10T07:17:51Z",
+      "baseRepository": "openpgp-pqc/draft-ehlen-openpgp-nist-bp-comp",
+      "baseRefName": "main",
+      "baseRefOid": "c7c49a1ad928426cffb983ae3338b9382395ffa8",
+      "headRepository": "openpgp-pqc/draft-ehlen-openpgp-nist-bp-comp",
+      "headRefName": "consistent-algo-names",
+      "headRefOid": "9a7b770348e2848e1d6fc4b4f1f83fb560307620",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOL4Ooz86IlpBn",
+          "commit": {
+            "abbreviatedOid": "9a7b770"
+          },
+          "author": "TJ-91",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": ":+1:",
+          "createdAt": "2024-09-10T07:17:51Z",
+          "updatedAt": "2024-09-10T07:17:51Z",
+          "comments": []
         }
       ]
     }
