@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-10-31T01:05:22.299400+00:00",
+  "timestamp": "2024-11-03T01:09:07.789876+00:00",
   "repo": "openpgp-pqc/draft-ehlen-openpgp-nist-bp-comp",
   "labels": [
     {
@@ -103,15 +103,15 @@
       "id": "I_kwDOL4Ooz86OXqpq",
       "title": "Update the KEM-combiner KDF input order to comply with NIST.SP.800-56Cr2",
       "url": "https://github.com/openpgp-pqc/draft-ehlen-openpgp-nist-bp-comp/issues/6",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "falko-strenzke",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "As pointed out by Quynh: For SHA3-(512/256), the only requirement is that the input to the hash function must be:  counter|| ECC shared secret output || ML-KEM shared secret output || anything else. So, Z is the ECC shared secret output || ML-KEM shared secret output. \r\n\r\nSee also\r\nhttps://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-56Cr2.pdf#page=22",
       "createdAt": "2024-07-03T12:59:14Z",
-      "updatedAt": "2024-07-04T13:08:43Z",
-      "closedAt": null,
+      "updatedAt": "2024-10-31T09:39:05Z",
+      "closedAt": "2024-10-31T09:39:04Z",
       "comments": [
         {
           "author": "falko-strenzke",
@@ -126,6 +126,13 @@
           "body": "This LAMPS issue is addressing the same problem: https://github.com/lamps-wg/draft-composite-kem/issues/26",
           "createdAt": "2024-07-04T13:08:41Z",
           "updatedAt": "2024-07-04T13:08:41Z"
+        },
+        {
+          "author": "falko-strenzke",
+          "authorAssociation": "COLLABORATOR",
+          "body": "We will remove the KEM combiner description completely and replace it by a reference to draft-ietf-openpgp-pqc",
+          "createdAt": "2024-10-31T09:39:04Z",
+          "updatedAt": "2024-10-31T09:39:04Z"
         }
       ]
     },
@@ -203,6 +210,24 @@
       "body": "Replace for instance the currently used term \"ML-KEM symmetric key share\"",
       "createdAt": "2024-07-08T07:05:19Z",
       "updatedAt": "2024-07-08T07:05:19Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 13,
+      "id": "I_kwDOL4Ooz86ci9ug",
+      "title": "remove KEM combiner description and instead refer to the construction in draft-ietf-openpgp-pqc",
+      "url": "https://github.com/openpgp-pqc/draft-ehlen-openpgp-nist-bp-comp/issues/13",
+      "state": "OPEN",
+      "author": "falko-strenzke",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [
+        "TJ-91"
+      ],
+      "labels": [],
+      "body": "",
+      "createdAt": "2024-10-31T09:40:13Z",
+      "updatedAt": "2024-10-31T09:40:13Z",
       "closedAt": null,
       "comments": []
     }
