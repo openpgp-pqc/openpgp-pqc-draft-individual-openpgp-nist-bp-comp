@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-11-03T01:09:07.789876+00:00",
+  "timestamp": "2024-11-05T01:03:13.471311+00:00",
   "repo": "openpgp-pqc/draft-ehlen-openpgp-nist-bp-comp",
   "labels": [
     {
@@ -227,9 +227,17 @@
       "labels": [],
       "body": "",
       "createdAt": "2024-10-31T09:40:13Z",
-      "updatedAt": "2024-10-31T09:40:13Z",
+      "updatedAt": "2024-11-04T09:13:19Z",
       "closedAt": null,
-      "comments": []
+      "comments": [
+        {
+          "author": "TJ-91",
+          "authorAssociation": "COLLABORATOR",
+          "body": "I proposed #14 with minimal changes to achieve this.\r\n\r\nWe can think about referencing instead of re-defining other stuff as well.",
+          "createdAt": "2024-11-04T09:13:18Z",
+          "updatedAt": "2024-11-04T09:13:18Z"
+        }
+      ]
     }
   ],
   "pulls": [
@@ -716,6 +724,32 @@
           "comments": []
         }
       ]
+    },
+    {
+      "number": 14,
+      "id": "PR_kwDOL4Ooz86AxWMM",
+      "title": "remove KEM combiner description; reference to openpgp pqc draft",
+      "url": "https://github.com/openpgp-pqc/draft-ehlen-openpgp-nist-bp-comp/pull/14",
+      "state": "OPEN",
+      "author": "TJ-91",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "closes #13 ",
+      "createdAt": "2024-11-04T09:11:33Z",
+      "updatedAt": "2024-11-04T09:12:15Z",
+      "baseRepository": "openpgp-pqc/draft-ehlen-openpgp-nist-bp-comp",
+      "baseRefName": "main",
+      "baseRefOid": "c7c49a1ad928426cffb983ae3338b9382395ffa8",
+      "headRepository": "openpgp-pqc/draft-ehlen-openpgp-nist-bp-comp",
+      "headRefName": "reference-KEM-combiner",
+      "headRefOid": "7c4b650281ce353c9fd48948affd9a79de5a0346",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
     }
   ]
 }
