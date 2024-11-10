@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-11-07T01:03:19.777557+00:00",
+  "timestamp": "2024-11-10T01:07:27.300562+00:00",
   "repo": "openpgp-pqc/draft-ehlen-openpgp-nist-bp-comp",
   "labels": [
     {
@@ -737,7 +737,7 @@
       "labels": [],
       "body": "closes #13 ",
       "createdAt": "2024-11-04T09:11:33Z",
-      "updatedAt": "2024-11-04T09:12:15Z",
+      "updatedAt": "2024-11-08T08:45:41Z",
       "baseRepository": "openpgp-pqc/draft-ehlen-openpgp-nist-bp-comp",
       "baseRefName": "main",
       "baseRefOid": "c7c49a1ad928426cffb983ae3338b9382395ffa8",
@@ -748,8 +748,37 @@
       "mergedAt": null,
       "mergedBy": null,
       "mergeCommit": null,
-      "comments": [],
-      "reviews": []
+      "comments": [
+        {
+          "author": "falko-strenzke",
+          "authorAssociation": "COLLABORATOR",
+          "body": "We'll now have to wait with merging this PR until it is clear whether we will actually be able to use the same combiner as in draft-ietf-openpgp-pqc",
+          "createdAt": "2024-11-08T08:45:39Z",
+          "updatedAt": "2024-11-08T08:45:39Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOL4Ooz86QbVaP",
+          "commit": {
+            "abbreviatedOid": "7c4b650"
+          },
+          "author": "falko-strenzke",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-11-08T08:42:52Z",
+          "updatedAt": "2024-11-08T08:42:52Z",
+          "comments": [
+            {
+              "originalPosition": 125,
+              "body": "Same as above: I think keeping the invocation of multiKeyCombine would be clearer.",
+              "createdAt": "2024-11-08T08:42:52Z",
+              "updatedAt": "2024-11-08T08:44:01Z"
+            }
+          ]
+        }
+      ]
     }
   ]
 }
