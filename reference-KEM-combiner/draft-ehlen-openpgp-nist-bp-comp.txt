@@ -599,7 +599,7 @@ Table of Contents
        [RFC3394] that includes a 64 bit integrity check
 
    9.  Output the algorithm specific part of the PKESK as
-       eccCipherText || mlkemCipherText len(symAlgId, C) || (||
+       eccCipherText || mlkemCipherText len(symAlgId, C) (||
        symAlgId) || C, where both symAlgId and len(C, symAlgId) are
        single octet fields, symAlgId denotes the symmetric algorithm ID
        used and is present only for a v3 PKESK, and len(C, symAlgId)

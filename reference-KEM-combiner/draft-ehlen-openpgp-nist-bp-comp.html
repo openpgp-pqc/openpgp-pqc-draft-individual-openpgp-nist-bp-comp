@@ -2058,7 +2058,7 @@ For ECC this is done following the relative specification in <span>[<a href="#SP
               <p id="section-5.2.3-2.8.1">Compute <code>C := AESKeyWrap(KEK, sessionKey)</code> with AES-256 as per <span>[<a href="#RFC3394" class="cite xref">RFC3394</a>]</span> that includes a 64 bit integrity check<a href="#section-5.2.3-2.8.1" class="pilcrow">¶</a></p>
 </li>
             <li id="section-5.2.3-2.9">
-              <p id="section-5.2.3-2.9.1">Output the algorithm specific part of the PKESK as <code>eccCipherText || mlkemCipherText len(symAlgId, C) || (|| symAlgId) || C</code>, where both <code>symAlgId</code> and <code>len(C, symAlgId)</code> are single octet fields, <code>symAlgId</code> denotes the symmetric algorithm ID used and is present only for a v3 PKESK, and <code>len(C, symAlgId)</code> denotes the combined octet length of the fields specified as the arguments.<a href="#section-5.2.3-2.9.1" class="pilcrow">¶</a></p>
+              <p id="section-5.2.3-2.9.1">Output the algorithm specific part of the PKESK as <code>eccCipherText || mlkemCipherText len(symAlgId, C) (|| symAlgId) || C</code>, where both <code>symAlgId</code> and <code>len(C, symAlgId)</code> are single octet fields, <code>symAlgId</code> denotes the symmetric algorithm ID used and is present only for a v3 PKESK, and <code>len(C, symAlgId)</code> denotes the combined octet length of the fields specified as the arguments.<a href="#section-5.2.3-2.9.1" class="pilcrow">¶</a></p>
 </li>
           </ol>
 </section>
