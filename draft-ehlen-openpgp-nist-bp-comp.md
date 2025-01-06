@@ -620,7 +620,7 @@ The procedure to perform public-key encryption with an ML-KEM + ECC composite sc
 
  8. Compute `C := AESKeyWrap(KEK, sessionKey)` with AES-256 as per {{RFC3394}} that includes a 64 bit integrity check
 
- 9. Output the algorithm specific part of the PKESK as `eccCipherText || mlkemCipherText len(symAlgId, C) || (|| symAlgId) || C`, where both `symAlgId` and `len(C, symAlgId)` are single octet fields, `symAlgId` denotes the symmetric algorithm ID used and is present only for a v3 PKESK, and `len(C, symAlgId)` denotes the combined octet length of the fields specified as the arguments.
+ 9. Output the algorithm specific part of the PKESK as `eccCipherText || mlkemCipherText len(symAlgId, C) (|| symAlgId) || C`, where both `symAlgId` and `len(C, symAlgId)` are single octet fields, `symAlgId` denotes the symmetric algorithm ID used and is present only for a v3 PKESK, and `len(C, symAlgId)` denotes the combined octet length of the fields specified as the arguments.
 
 ### Decryption procedure
 
