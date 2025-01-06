@@ -55,9 +55,9 @@ normative:
   I-D.ietf-openpgp-crypto-refresh:
 
 
-  draft-ietf-openpgp-pqc-05:
-    target: https://www.ietf.org/archive/id/draft-ietf-openpgp-pqc-05.html
-    title: Post-Quantum Cryptography in OpenPGP (draft-ietf-openpgp-pqc-05)
+  draft-ietf-openpgp-pqc-06:
+    target: https://www.ietf.org/archive/id/draft-ietf-openpgp-pqc-06.html
+    title: Post-Quantum Cryptography in OpenPGP (draft-ietf-openpgp-pqc-06)
     author:
       -
         ins: S. Kousidis
@@ -329,9 +329,9 @@ This document defines PQ/T composite schemes based on ML-KEM and ML-DSA combined
 # Introduction
 
 This document defines PQ/T composite schemes based on ML-KEM and ML-DSA combined with ECDH and ECDSA using the NIST and Brainpool domain parameters for the OpenPGP protocol.
-As such it extends [draft-ietf-openpgp-pqc-05], which introduces post-quantum cryptography in OpenPGP.
+As such it extends [draft-ietf-openpgp-pqc-06], which introduces post-quantum cryptography in OpenPGP.
 The ML-KEM and ML-DSA composite schemes defined in that document are built with ECC algorithms using the Edwards Curves defined in {{RFC8032}} and {{RFC7748}}.
-This document extends the set of algorithms given in [draft-ietf-openpgp-pqc-05] by further combinations of ML-KEM and ML-DSA with the NIST {{SP800-186}} and Brainpool {{RFC5639}} domain parameters.
+This document extends the set of algorithms given in [draft-ietf-openpgp-pqc-06] by further combinations of ML-KEM and ML-DSA with the NIST {{SP800-186}} and Brainpool {{RFC5639}} domain parameters.
 The support of NIST and Brainpool domain parameters is required in various applications related to certain regulatory environments.
 
 ## Conventions used in this Document
@@ -376,8 +376,8 @@ For interoperability this extension offers ML-* in composite combinations with t
 
 ## Applicable Specifications for the use of PQC Algorithms in OpenPGP
 
-This document is to be understood as an extension of [draft-ietf-openpgp-pqc-05], which introduced PQC in OpenPGP, in that it defines further algorithm code points.
-All general specifications in [draft-ietf-openpgp-pqc-05] that pertain to the ML-KEM and ML-DSA composite schemes or generally cryptographic schemes defined therein equally apply to the schemes specified in this document.
+This document is to be understood as an extension of [draft-ietf-openpgp-pqc-06], which introduced PQC in OpenPGP, in that it defines further algorithm code points.
+All general specifications in [draft-ietf-openpgp-pqc-06] that pertain to the ML-KEM and ML-DSA composite schemes or generally cryptographic schemes defined therein equally apply to the schemes specified in this document.
 
 # Preliminaries
 
@@ -592,7 +592,7 @@ The ML-KEM + ECC composite public-key encryption schemes are built according to 
 
 ### Key combiner {#kem-key-combiner}
 
-For the composite KEM schemes defined in this document the procedure `multiKeyCombine` that is defined in [draft-ietf-openpgp-pqc-05] Section 4.2.1 MUST be used to compute the KEK that wraps a session key.
+For the composite KEM schemes defined in this document the procedure `multiKeyCombine` that is defined in [draft-ietf-openpgp-pqc-06] Section 4.2.1 MUST be used to compute the KEK that wraps a session key.
 
 ### Key generation procedure {#ecc-mlkem-generation}
 
@@ -616,7 +616,7 @@ The procedure to perform public-key encryption with an ML-KEM + ECC composite sc
 
  6. Compute `(mlkemCipherText, mlkemKeyShare) := ML-KEM.Encaps(mlkemPublicKey)`
 
- 7. Compute the KEK as defined in {{kem-key-combiner}}
+ 7. Compute `KEK = multiKeyCombine(mlkemKeyShare, mlkemCipherText, mlkemPublicKey, eccKeyShare, eccCipherText, eccPublicKey, algId)`
 
  8. Compute `C := AESKeyWrap(KEK, sessionKey)` with AES-256 as per {{RFC3394}} that includes a 64 bit integrity check
 
@@ -642,7 +642,7 @@ The procedure to perform public-key decryption with an ML-KEM + ECC composite sc
 
  8. Compute `(mlkemKeyShare) := ML-KEM.Decaps(mlkemCipherText, mlkemSecretKey)`
 
- 9. Compute the KEK as defined in {{kem-key-combiner}}
+ 9. Compute `KEK = multiKeyCombine(mlkemKeyShare, mlkemCipherText, mlkemPublicKey, eccKeyShare, eccCipherText, eccPublicKey, algId)`
 
  10. Compute `sessionKey := AESKeyUnwrap(KEK, C)`  with AES-256 as per {{RFC3394}}, aborting if the 64 bit integrity check fails
 
